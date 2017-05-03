@@ -1,16 +1,3 @@
-server:
-  port: 8080
-  context-path: /auction
 spring:
-  datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/auction_spring_boot
-    username: root
-    password: root
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-  thymeleaf:
-    cache: false
-    mode: LEGACYHTML5
+  profiles:
+    active: release

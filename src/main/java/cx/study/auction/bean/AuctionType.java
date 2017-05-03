@@ -14,7 +14,7 @@ public class AuctionType {
     @GeneratedValue
     private Integer id;
     private String typeName;
-
+    private int status;   //是否启用，0,启用 1 不启用
     private long createTime;
     private long updateTime;
 
@@ -48,5 +48,13 @@ public class AuctionType {
 
     public void setUpdateTime(long updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

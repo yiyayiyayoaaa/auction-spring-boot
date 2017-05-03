@@ -24,7 +24,7 @@ public class Auction {
     private double appraisedPrice; //估价
     private double bidIncrements; //竞价增幅
     private double hammerPrice; //成交价
-
+    private double deposit;      //保证金
     private int status;
     @Column(length = 500)
     private String description;
@@ -153,5 +153,13 @@ public class Auction {
 
     public void setImageUrls(List<ImageUrl> imageUrls) {
         this.imageUrls = imageUrls;
+    }
+
+    public double getDeposit() {
+        return deposit;
+    }
+
+    public void setDeposit(double deposit) {
+        this.deposit = deposit;
     }
 }

@@ -37,4 +37,12 @@ public class HtmlController {
     public ModelAndView toAuctionCategory(){
         return new ModelAndView("auction-category");
     }
+    @GetMapping(value = "/auction-category-add")
+    public ModelAndView toAuctionCategoryAdd(){
+        return new ModelAndView("auction-category-add");
+    }
+    @GetMapping(value = "/auction-add")
+    public ModelAndView toAuctionAdd(){
+        return new ModelAndView("auction-add");
+    }
 }
