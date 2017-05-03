@@ -34,8 +34,8 @@ public class AuctionTypeController {
     }
 
     @PostMapping("/type-add")
-    public String add(String typeName){
+    @ResponseBody
+    public void add(String typeName){
         auctionTypeService.save(typeName);
-        return "auction-category";
     }
 }

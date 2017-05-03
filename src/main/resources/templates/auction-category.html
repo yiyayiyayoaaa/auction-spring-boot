@@ -26,12 +26,14 @@
             text-align:center;
         }
     </style>
+    <script>
+    </script>
 </head>
 <body>
 <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 拍品管理 <span class="c-gray en">&gt;</span> 分类管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 <div class="page-container">
-    <div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a class="btn btn-primary radius" onclick="admin_add()" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 添加分类</a></span> </div>
-	<div class="mt-20">
+    <div class="cl pd-5 bg-1 bk-gray"> <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a class="btn btn-primary radius" onclick="type_add()" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 添加分类</a></span> </div>
+    <div class="mt-20">
 		<table class="table table-border table-bordered table-bg table-hover" id="table" style="text-align: center">
 			<thead>
 			<tr>
@@ -51,6 +53,7 @@
 		</table>
 	</div>
 </div>
+
 <!--_footer 作为公共模版分离出去-->
 <script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript" src="lib/layer/2.4/layer.js"></script>
@@ -67,6 +70,9 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $('#table').DataTable( {
+            "aoColumnDefs": [
+                {"orderable":false,"aTargets":[0,1,2,3,4,5]}// 制定列不参与排序
+            ],
             bPaginate: true,
             autoWidth:false,
             bServerSide:true,
@@ -86,7 +92,7 @@
                     return new Date(data).toLocaleString();} },
                 { "targets": -1,
                     "data": null,
-                    "defaultContent": "<a title='编辑' href='javascript:;' onclick='admin_edit()' class='ml-5' style='text-decoration:none'><i class='Hui-iconfont'>&#xe6df;</i></a> <a title='删除' href='javascript:;' onclick='admin_del(this,1)' class='ml-5' style='text-decoration:none'><i class='Hui-iconfont'>&#xe6e2;</i></a>"
+                    "defaultContent": "<a title='编辑' href='javascript:;' onclick='type_edit(this)' class='ml-5' style='text-decoration:none'><i class='Hui-iconfont'>&#xe6df;</i></a> <a title='删除' href='javascript:;' onclick='admin_del(this,1)' class='ml-5' style='text-decoration:none'><i class='Hui-iconfont'>&#xe6e2;</i></a>"
                 }
             ]
         } );
@@ -112,11 +118,12 @@
 
 
     /*管理员-添加*/
-    function admin_add(){
+    function type_add(){
         layer_show("添加",'auction-category-add',800,500);
     }
     /*管理员-编辑*/
-    function admin_edit(){
+    function type_edit(obj){
+        alert( $(obj).parent("td").parent("tr").children("td:eq(1)").text());
         layer_show("编辑",'auction-category-add',800,500);
     }
 
@@ -149,19 +156,22 @@
             fix: false, //不固定
             maxmin: true,
             shade:0.4,
+            shadeClose: true, //点击遮罩关闭层
             title: title,
-            content: url
+            content: url,
+            end: function () {
+                location.reload();
+            }
         });
     }
     /*关闭弹出框口*/
     function layer_close(){
-        var index = parent.layer.getFrameIndex(window.name);
-        parent.layer.close(index);
+        var index = layer.getFrameIndex(window.name);
+        layer.close(index);
+        layer.close();
     }
 
-    $(function(){
 
-    });
 </script>
 </body>
 </html>

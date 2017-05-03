@@ -23,7 +23,7 @@
 </head>
 <body>
 <div class="page-container">
-    <form action="type-add" method="post" class="form form-horizontal" id="form-user-add">
+    <form action="type-add" method="post" class="form form-horizontal" id="form-add">
         <div class="row cl">
             <label class="form-label col-xs-4 col-sm-2">
                 <span class="c-red">*</span>
@@ -32,12 +32,12 @@
                 <input type="text" class="input-text" value="" placeholder="请输入要添加的分类名称" id="user-name" name="typeName">
             </div>
         </div>
-        <div class="row cl">
-            <div class="col-9 col-offset-2">
-                <input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
-            </div>
-        </div>
     </form>
+    <div class="row cl">
+        <div class="col-9 col-offset-2">
+            <button class="btn btn-primary radius" onclick="submit()">&nbsp;&nbsp;提交&nbsp;&nbsp;</button>
+        </div>
+    </div>
 </div>
 <!--_footer 作为公共模版分离出去-->
 <script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script> 
@@ -56,6 +56,12 @@
         var index = parent.layer.getFrameIndex(window.name);
         parent.layer.close(index);
     }
+    function submit() {
+        $('#form-add').ajaxSubmit(function (data) {
+            layer_close();
+        });
+    }
+
 $(function(){
 	
 });
