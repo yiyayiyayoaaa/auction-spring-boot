@@ -16,9 +16,12 @@ public class Auction {
     private String name;
     @ManyToOne
     private AuctionType type;
-
+    @Transient
+    private Integer typeId;
     @ManyToOne
     private Customer customer;
+    @Transient
+    private Integer customerId;
     @Column()
     private double startPrice; //起拍价
     private double appraisedPrice; //估价
@@ -161,5 +164,21 @@ public class Auction {
 
     public void setDeposit(double deposit) {
         this.deposit = deposit;
+    }
+
+    public Integer getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(Integer typeId) {
+        this.typeId = typeId;
+    }
+
+    public Integer getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
     }
 }

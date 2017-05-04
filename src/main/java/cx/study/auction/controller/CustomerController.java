@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,6 +34,11 @@ public class CustomerController {
         map.put("iTotalRecords",page.getTotalElements());
         map.put("iTotalDisplayRecords",page.getTotalElements());
         return map;
+    }
+
+    @GetMapping("/customers")
+    public List<Customer> list(){
+        return customerService.findAll();
     }
 
     @PostMapping("/add-customer")

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  *
@@ -56,7 +57,12 @@ public class HtmlController {
     }
     @GetMapping(value = "/auction-add")
     public ModelAndView toAuctionAdd(){
-        return new ModelAndView("auction-add");
+        ModelAndView modelAndView = new ModelAndView("auction-add");
+        List<AuctionType> types = auctionTypeService.findAll();
+        List<Customer> customers = customerService.findAll();
+        modelAndView.addObject("types",types);
+        modelAndView.addObject("customers",customers);
+        return modelAndView;
     }
 
     /* 用户管理 */

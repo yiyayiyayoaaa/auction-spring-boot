@@ -13,6 +13,7 @@ import javax.annotation.Resource;
 import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -36,6 +37,10 @@ public class CustomerService {
                 return null;
             }
         },pageRequest);
+    }
+
+    public List<Customer> findAll(){
+        return customerRepository.findAll();
     }
 
     public Customer findById(Integer id){

@@ -1,5 +1,6 @@
 package cx.study.auction.controller;
 
+import cx.study.auction.bean.HttpResult;
 import org.hibernate.loader.custom.Return;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Base64Utils;
@@ -53,18 +54,20 @@ public class FileController {
 
     @PostMapping("/upload/image")
     @ResponseBody
-    public void uploadImage(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws Exception {
+    public HttpResult<String> uploadImage(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws Exception {
         if (file.isEmpty()){
-            return;
+            return new HttpResult<>(1,"失败",null);
         }
         String filename = file.getOriginalFilename();
         String suffix = filename.substring(filename.lastIndexOf("."));
         filename = UUID.randomUUID().toString() + suffix;
-        File savePath = new File("D:/file/image");
+        String path = request.getServletContext().getRealPath("/file/image");
+        File savePath = new File(path);
         if (!savePath.exists()){
             savePath.mkdirs();
         }
         File local = new File(savePath,filename);
         file.transferTo(local);
+        return new HttpResult<>(0,"成功","/file/image/" + filename);
     }
 }

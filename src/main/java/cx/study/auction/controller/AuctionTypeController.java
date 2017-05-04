@@ -33,6 +33,11 @@ public class AuctionTypeController {
         return map;
     }
 
+    @GetMapping("/types")
+    public List<AuctionType> list(){
+        return auctionTypeService.findAll();
+    }
+
     @PostMapping("/type-add")
     public void add(String typeName){
         auctionTypeService.save(typeName);

@@ -47,6 +47,10 @@ public class AuctionTypeService {
             }
         },pageRequest);
     }
+
+    public List<AuctionType> findAll(){
+        return auctionTypeRepository.findAll();
+    }
     @Transactional
     public AuctionType save(String typeName){
         AuctionType auctionType = new AuctionType();
