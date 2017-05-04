@@ -20,7 +20,7 @@
 <script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
 <script>DD_belatedPNG.fix('*');</script>
 <![endif]-->
-<title>产品分类</title>
+<title>客户管理</title>
     <style>
         .table>tbody>tr>td{
             text-align:center;
@@ -30,19 +30,21 @@
     </script>
 </head>
 <body>
-<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 拍品管理 <span class="c-gray en">&gt;</span> 分类管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 用户中心 <span class="c-gray en">&gt;</span> 客户管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 <div class="page-container">
-    <div class="cl pd-5 bg-1 bk-gray"> <span class="l"><a href="javascript:;" onclick="delete_batch()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a class="btn btn-primary radius" onclick="type_add()" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 新增</a></span> </div>
+    <div class="cl pd-5 bg-1 bk-gray"> <span class="l"><a href="javascript:;" onclick="delete_batch()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a class="btn btn-primary radius" onclick="add()" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 新增</a></span> </div>
     <div class="mt-20">
 		<table class="table table-border table-bordered table-bg table-hover" id="table" style="text-align: center">
 			<thead>
 			<tr>
-				<th scope="col" colspan="9">分类列表</th>
+				<th scope="col" colspan="9">客户列表</th>
 			</tr>
 			<tr class="text-c">
 				<th width="25"><input type="checkbox" /></th>
 				<th width="40">ID</th>
-				<th width="150">分类名称</th>
+				<th width="150">名称</th>
+				<th width="150">联系方式</th>
+				<th width="150">备注</th>
                 <th width="130">创建时间</th>
                 <th width="130">修改时间</th>
                 <th width="100">操作</th>
@@ -71,40 +73,42 @@
     $(document).ready(function() {
         $('#table').DataTable( {
             "aoColumnDefs": [
-                {"orderable":false,"aTargets":[0,1,2,3,4,5]}// 制定列不参与排序
+                {"orderable":false,"aTargets":[0,1,2,3,4,5,6,7]}// 制定列不参与排序
             ],
             bPaginate: true,
             autoWidth:false,
             bServerSide:true,
             "bDestroy" : true,
         "processing":true,
-            "ajax": "type-list",
+            "ajax": "customer-list",
             "columns": [
                 { "targets": 0,
                     "data": null,
                     "defaultContent": "<input type='checkbox' name='ck-id'>"
                 },
                 { "data": "id" },
-                { "data": "typeName" },
+                { "data": "name" },
+                { "data": "phone" },
+                { "data": "remarks" },
                 { "data": "createTime" , "render": function( data, type, row, meta) {
                     return new Date(data).toLocaleString();}},
                 { "data": "updateTime","render": function( data, type, row, meta) {
                     return new Date(data).toLocaleString();} },
                 { "targets": -1,
                     "data": null,
-                    "defaultContent": "<a title='编辑' href='javascript:;' onclick='type_edit(this)' class='ml-5' style='text-decoration:none'><i class='Hui-iconfont'>&#xe6df;</i></a> <a title='删除' href='javascript:;' onclick='type_del(this)' class='ml-5' style='text-decoration:none'><i class='Hui-iconfont'>&#xe6e2;</i></a>"
+                    "defaultContent": "<a title='编辑' href='javascript:;' onclick='edit(this)' class='ml-5' style='text-decoration:none'><i class='Hui-iconfont'>&#xe6df;</i></a> <a title='删除' href='javascript:;' onclick='del(this)' class='ml-5' style='text-decoration:none'><i class='Hui-iconfont'>&#xe6e2;</i></a>"
                 }
             ]
         } );
     } );
 
-    /*分类-删除*/
-    function type_del(obj){
+    /*删除*/
+    function del(obj){
         var id =  $(obj).parent("td").parent("tr").children("td:eq(1)").text();
         layer.confirm('确认要删除吗？',function(index){
             $.ajax({
                 type: 'POST',
-                url: 'type-delete',
+                url: 'delete-customer',
                 dataType: 'json',
                 data:{
                   id:id
@@ -131,7 +135,7 @@
         layer.confirm('确认要删除这些数据吗？',function(index){
             $.ajax({
                 type: 'POST',
-                url: 'type-delete-batch',
+                url: 'delete-batch-customer',
                 data:{
                     ids:s
                 },
@@ -147,14 +151,14 @@
         });
     }
     
-    /*分类-添加*/
-    function type_add(){
-        layer_show("添加",'auction-category-add',800,500);
+    /*添加*/
+    function add(){
+        layer_show("添加",'customer-add',800,500);
     }
-    /*分类-编辑*/
-    function type_edit(obj){
+    /*编辑*/
+    function edit(obj){
         var id =  $(obj).parent("td").parent("tr").children("td:eq(1)").text();
-        layer_show("编辑",'auction-category-edit/'+id,800,500);
+        layer_show("编辑",'customer-edit/'+id,800,500);
     }
 
 

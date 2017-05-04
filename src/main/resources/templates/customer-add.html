@@ -23,25 +23,41 @@
 </head>
 <body>
 <div class="page-container">
- <div  class="form form-horizontal">
-     <form th:action="@{/type-update}" method="post" id="form-edit">
-         <div class="row cl">
-             <label class="form-label col-xs-4 col-sm-2">
-                 <span class="c-red">*</span>
-                 分类名称：</label>
-             <div class="formControls col-xs-6 col-sm-6">
-                 <input type="hidden" class="input-text" th:value="${type.id}" id="id" name="id">
-                 <input type="text" class="input-text" th:value="${type.typeName}" placeholder="请输入要编辑的分类名称" id="typeName" name="typeName">
-             </div>
-         </div>
-     </form>
-     <div class="row cl">
-         <div class="col-9 col-offset-2">
-             <button class="btn btn-primary radius" onclick="submit()">&nbsp;&nbsp;提交&nbsp;&nbsp;</button>
-             <button class="btn btn-primary radius" onclick="cancel()">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
-         </div>
-     </div>
- </div>
+
+  <div class="form form-horizontal">
+      <form th:action="@{/add-customer}" method="post"  id="form-edit">
+          <div class="row cl">
+              <label class="form-label col-xs-4 col-sm-2">
+                  <span class="c-red">*</span>
+                  名称：</label>
+              <div class="formControls col-xs-6 col-sm-6">
+                  <input type="text" class="input-text" placeholder="请输入要添加的名称" id="name" name="name">
+              </div>
+          </div>
+          <div class="row cl">
+              <label class="form-label col-xs-4 col-sm-2">
+                  <span class="c-red">*</span>
+                  联系方式：</label>
+              <div class="formControls col-xs-6 col-sm-6">
+                  <input type="text" class="input-text" placeholder="请输入要添加联系方式" id="phone" name="phone">
+              </div>
+          </div>
+          <div class="row cl">
+              <label class="form-label col-xs-4 col-sm-2">
+                  <span class="c-red">*</span>
+                  备注：</label>
+              <div class="formControls col-xs-6 col-sm-6">
+                  <textarea class="textarea valid" placeholder="请输入要添加的备注" id="remarks" name="remarks"></textarea>
+              </div>
+          </div>
+      </form>
+      <div class="row cl">
+          <div class="col-9 col-offset-2">
+              <button class="btn btn-primary radius" onclick="submit()">&nbsp;&nbsp;提交&nbsp;&nbsp;</button>
+              <button class="btn btn-primary radius" onclick="cancel()">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+          </div>
+      </div>
+  </div>
 
 </div>
 <!--_footer 作为公共模版分离出去-->
@@ -63,7 +79,7 @@
     }
     function submit() {
         $('#form-edit').ajaxSubmit(function (data) {
-            parent.layer.msg('修改成功!',{icon:1,time:1000});
+            parent.layer.msg('添加成功!',{icon:1,time:1000});
             layer_close();
         });
     }

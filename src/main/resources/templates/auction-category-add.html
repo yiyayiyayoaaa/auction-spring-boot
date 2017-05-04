@@ -23,21 +23,25 @@
 </head>
 <body>
 <div class="page-container">
-    <form action="type-add" method="post" class="form form-horizontal" id="form-add">
+    <div  class="form form-horizontal">
+        <form action="type-add" method="post" id="form-add">
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2">
+                    <span class="c-red">*</span>
+                    分类名称：</label>
+                <div class="formControls col-xs-6 col-sm-6">
+                    <input type="text" class="input-text" value="" placeholder="请输入要添加的分类名称" id="user-name" name="typeName">
+                </div>
+            </div>
+        </form>
         <div class="row cl">
-            <label class="form-label col-xs-4 col-sm-2">
-                <span class="c-red">*</span>
-                分类名称：</label>
-            <div class="formControls col-xs-6 col-sm-6">
-                <input type="text" class="input-text" value="" placeholder="请输入要添加的分类名称" id="user-name" name="typeName">
+            <div class="col-9 col-offset-2">
+                <button class="btn btn-primary radius" onclick="submit()">&nbsp;&nbsp;提交&nbsp;&nbsp;</button>
+                <button class="btn btn-primary radius" onclick="cancel()">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
             </div>
         </div>
-    </form>
-    <div class="row cl">
-        <div class="col-9 col-offset-2">
-            <button class="btn btn-primary radius" onclick="submit()">&nbsp;&nbsp;提交&nbsp;&nbsp;</button>
-        </div>
     </div>
+
 </div>
 <!--_footer 作为公共模版分离出去-->
 <script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script> 
@@ -62,7 +66,9 @@
             layer_close();
         });
     }
-
+    function cancel() {
+        layer_close();
+    }
 $(function(){
 	
 });

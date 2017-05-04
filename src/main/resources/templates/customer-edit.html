@@ -23,26 +23,41 @@
 </head>
 <body>
 <div class="page-container">
- <div  class="form form-horizontal">
-     <form th:action="@{/type-update}" method="post" id="form-edit">
-         <div class="row cl">
-             <label class="form-label col-xs-4 col-sm-2">
-                 <span class="c-red">*</span>
-                 分类名称：</label>
-             <div class="formControls col-xs-6 col-sm-6">
-                 <input type="hidden" class="input-text" th:value="${type.id}" id="id" name="id">
-                 <input type="text" class="input-text" th:value="${type.typeName}" placeholder="请输入要编辑的分类名称" id="typeName" name="typeName">
-             </div>
-         </div>
-     </form>
-     <div class="row cl">
-         <div class="col-9 col-offset-2">
-             <button class="btn btn-primary radius" onclick="submit()">&nbsp;&nbsp;提交&nbsp;&nbsp;</button>
-             <button class="btn btn-primary radius" onclick="cancel()">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
-         </div>
-     </div>
- </div>
-
+    <div class="form form-horizontal">
+    <form th:action="@{/update-customer}" method="post"  id="form-edit">
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                <span class="c-red">*</span>
+                名称：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <input type="hidden" class="input-text" id="id" name="id" th:value="${customer.id}">
+                <input type="text" class="input-text" th:value="${customer.name}" placeholder="请输入要编辑的名称" id="name" name="name">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                <span class="c-red">*</span>
+                联系方式：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <input type="text" class="input-text" th:value="${customer.phone}" placeholder="请输入要编辑联系方式" id="phone" name="phone">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                备注：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <textarea class="textarea valid" th:text="${customer.remarks}" placeholder="请输入要编辑的备注"
+                          id="remarks" name="remarks"></textarea>
+            </div>
+        </div>
+    </form>
+    <div class="row cl">
+        <div class="col-9 col-offset-2">
+            <button class="btn btn-primary radius" onclick="submit()">&nbsp;&nbsp;提交&nbsp;&nbsp;</button>
+            <button class="btn btn-primary radius" onclick="cancel()">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+        </div>
+    </div>
+    </div>
 </div>
 <!--_footer 作为公共模版分离出去-->
 <script type="text/javascript" th:src="@{/lib/jquery/1.9.1/jquery.min.js}"></script>

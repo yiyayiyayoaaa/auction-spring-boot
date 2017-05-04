@@ -1,8 +1,14 @@
 package cx.study.auction.controller;
 
+import cx.study.auction.bean.AuctionType;
+import cx.study.auction.bean.Customer;
+import cx.study.auction.service.AuctionTypeService;
+import cx.study.auction.service.CustomerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.annotation.Resource;
 
 /**
  *
@@ -10,7 +16,10 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 public class HtmlController {
-
+    @Resource
+    private AuctionTypeService auctionTypeService;
+    @Resource
+    private CustomerService customerService;
     @GetMapping(value = "/index")
     public ModelAndView toIndex(){
         return new ModelAndView("index");
@@ -25,8 +34,8 @@ public class HtmlController {
     public ModelAndView toWelcome(){
         return new ModelAndView("welcome");
     }
-
-    @GetMapping(value = "/auction-list")
+    /*  拍品管理  */
+    @GetMapping(value = "/auction")
     public ModelAndView toAuctionList(){
         return new ModelAndView("auction-list");
     }
@@ -38,15 +47,38 @@ public class HtmlController {
     public ModelAndView toAuctionCategoryAdd(){
         return new ModelAndView("auction-category-add");
     }
-    @GetMapping(value = "/auction-category-edit/{id}/{typeName}")
-    public ModelAndView toAuctionCategoryEdit(@PathVariable Integer id, @PathVariable String typeName){
+    @GetMapping(value = "/auction-category-edit/{id}")
+    public ModelAndView toAuctionCategoryEdit(@PathVariable Integer id){
         ModelAndView modelAndView = new ModelAndView("auction-category-edit");
-        modelAndView.addObject("id",id);
-        modelAndView.addObject("typeName",typeName);
+        AuctionType type = auctionTypeService.findById(id);
+        modelAndView.addObject("type",type);
         return modelAndView;
     }
     @GetMapping(value = "/auction-add")
     public ModelAndView toAuctionAdd(){
         return new ModelAndView("auction-add");
+    }
+
+    /* 用户管理 */
+    @GetMapping(value = "/member")
+    public String toMemberList(){
+        return "member-list";
+    }
+    @GetMapping(value = "/customer")
+    public String toCustomerList(){
+        return "customer-list";
+    }
+
+    @GetMapping(value = "/customer-add")
+    public String toCustomerAdd(){
+        return "customer-add";
+    }
+
+    @GetMapping(value = "/customer-edit/{id}")
+    public ModelAndView toCustomerEdit(@PathVariable Integer id){
+        Customer customer = customerService.findById(id);
+        ModelAndView modelAndView = new ModelAndView("customer-edit");
+        modelAndView.addObject("customer",customer);
+        return modelAndView;
     }
 }

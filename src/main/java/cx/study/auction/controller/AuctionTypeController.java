@@ -24,7 +24,6 @@ public class AuctionTypeController {
     private AuctionTypeService auctionTypeService;
 
     @GetMapping("/type-list")
-    @ResponseBody
     public Map<String,Object> list(int start,int length,@RequestParam("search[value]") String query){
         Map<String,Object> map = new HashMap<>();
         Page<AuctionType> page = auctionTypeService.findAll(start, length,query);

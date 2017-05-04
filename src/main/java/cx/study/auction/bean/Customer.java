@@ -19,6 +19,9 @@ public class Customer {
     private String phone;
     private String remarks;
 
+
+    private long createTime;
+    private long updateTime;
     public Integer getId() {
         return id;
     }
@@ -49,5 +52,21 @@ public class Customer {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
+    }
+
+    public long getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(long updateTime) {
+        this.updateTime = updateTime;
     }
 }

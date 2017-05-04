@@ -28,6 +28,10 @@ public class AuctionTypeService {
     @Resource
     private AuctionTypeRepository auctionTypeRepository;
 
+    public AuctionType findById(Integer id){
+        return auctionTypeRepository.findOne(id);
+    }
+
     public Page<AuctionType> findAll(int start, int length,String query){
         int page = start/length;
         Sort sort = new Sort(Sort.Direction.DESC,"updateTime");
@@ -66,4 +70,5 @@ public class AuctionTypeService {
     public void delete(String id){
         auctionTypeRepository.delete(Integer.parseInt(id));
     }
+
 }
