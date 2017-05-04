@@ -21,11 +21,12 @@ public class AdminController {
     @Resource
     private AdminService adminService;
     @PostMapping("/login")
-    public String login(String username, String password, HttpSession session, HttpServletRequest request){
+    public String login(String username, String password, HttpSession session, HttpServletRequest request) throws CloneNotSupportedException {
         if (!StringUtils.isEmpty(username) && !StringUtils.isEmpty(password)){
             Admin admin = adminService.login(username, password);
             if (admin != null){
-                session.setAttribute("admin",admin);
+                Admin mAdmin  = (Admin) admin.clone();
+                session.setAttribute("admin",mAdmin);
                 admin.setUpdateTime(new Date().getTime());
                 admin.setIp(getIpAddr(request));
                 adminService.AdminUpdate(admin);

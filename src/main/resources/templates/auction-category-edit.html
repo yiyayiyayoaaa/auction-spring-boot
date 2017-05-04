@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<!--[if lt IE 9]>
+<script type="text/javascript" th:src="@{/lib/html5shiv.js}"></script>
+<script type="text/javascript" th:src="@{/lib/respond.min.js}"></script>
+
+<![endif]-->
+<link rel="stylesheet" type="text/css" th:href="@{/static/h-ui/css/H-ui.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/static/h-ui.admin/css/H-ui.admin.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/lib/Hui-iconfont/1.0.8/iconfont.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/static/h-ui.admin/css/style.css}" />
+<!--[if IE 6]>
+<script type="text/javascript" th:src="@{/lib/DD_belatedPNG_0.0.8a-min.js}" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<title>编辑分类</title>
+</head>
+<body>
+<div class="page-container">
+    <form th:action="@{/type-update}" method="post" class="form form-horizontal" id="form-edit">
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-2">
+                <span class="c-red">*</span>
+                分类名称：</label>
+            <div class="formControls col-xs-6 col-sm-6">
+                <input type="hidden" class="input-text" th:value="${id}" id="id" name="id">
+                <input type="text" class="input-text" th:value="${typeName}" placeholder="请输入要编辑的分类名称" id="typeName" name="typeName">
+            </div>
+        </div>
+    </form>
+    <div class="row cl">
+        <div class="col-9 col-offset-2">
+            <button class="btn btn-primary radius" onclick="submit()">&nbsp;&nbsp;提交&nbsp;&nbsp;</button>
+            <button class="btn btn-primary radius" onclick="cancel()">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+        </div>
+    </div>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" th:src="@{/lib/jquery/1.9.1/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/lib/layer/2.4/layer.js}"></script>
+<script type="text/javascript" th:src="@{/static/h-ui/js/H-ui.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/h-ui.admin/js/H-ui.admin.js}"></script>
+<!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" th:src="@{/lib/jquery.validation/1.14.0/jquery.validate.js}"></script>
+<script type="text/javascript" th:src="@{/lib/jquery.validation/1.14.0/validate-methods.js}"></script>
+<script type="text/javascript" th:src="@{/lib/jquery.validation/1.14.0/messages_zh.js}"></script>
+<script type="text/javascript">
+    /*关闭弹出框口*/
+    function layer_close(){
+        var index = parent.layer.getFrameIndex(window.name);
+        parent.layer.close(index);
+    }
+    function submit() {
+        $('#form-edit').ajaxSubmit(function (data) {
+            parent.layer.msg('修改成功!',{icon:1,time:1000});
+            layer_close();
+        });
+    }
+    function cancel() {
+        layer_close();
+    }
+$(function(){
+	
+});
+</script>
+</body>
+</html>

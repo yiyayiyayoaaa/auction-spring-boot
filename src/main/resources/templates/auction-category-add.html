@@ -58,6 +58,7 @@
     }
     function submit() {
         $('#form-add').ajaxSubmit(function (data) {
+            parent.layer.msg('添加成功!',{icon:1,time:1000});
             layer_close();
         });
     }

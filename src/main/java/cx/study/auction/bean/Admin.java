@@ -3,13 +3,14 @@ package cx.study.auction.bean;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.io.Serializable;
 
 /**
  *
  * Created by chengxiao on 2017/4/30.
  */
 @Entity
-public class Admin {
+public class Admin implements Serializable,Cloneable{
     @Id
     @GeneratedValue
     private Integer id;
@@ -22,7 +23,10 @@ public class Admin {
     private long createTime;
     private long updateTime;
 
-
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 
     public Integer getId() {
         return id;

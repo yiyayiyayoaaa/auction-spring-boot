@@ -1,10 +1,7 @@
 package cx.study.auction.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -40,6 +37,13 @@ public class HtmlController {
     @GetMapping(value = "/auction-category-add")
     public ModelAndView toAuctionCategoryAdd(){
         return new ModelAndView("auction-category-add");
+    }
+    @GetMapping(value = "/auction-category-edit/{id}/{typeName}")
+    public ModelAndView toAuctionCategoryEdit(@PathVariable Integer id, @PathVariable String typeName){
+        ModelAndView modelAndView = new ModelAndView("auction-category-edit");
+        modelAndView.addObject("id",id);
+        modelAndView.addObject("typeName",typeName);
+        return modelAndView;
     }
     @GetMapping(value = "/auction-add")
     public ModelAndView toAuctionAdd(){
