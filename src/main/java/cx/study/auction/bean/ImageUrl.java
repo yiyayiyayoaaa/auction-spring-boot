@@ -1,5 +1,8 @@
 package cx.study.auction.bean;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -15,7 +18,7 @@ public class ImageUrl {
     @GeneratedValue
     private Integer id;
     private String url;
-    @ManyToOne
+    @ManyToOne @JsonIgnore
     private Auction auction;
     public Integer getId() {
         return id;

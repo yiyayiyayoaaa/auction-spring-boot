@@ -3,9 +3,11 @@ package cx.study.auction.service;
 import cx.study.auction.bean.Auction;
 import cx.study.auction.bean.AuctionType;
 import cx.study.auction.bean.Customer;
+import cx.study.auction.bean.ImageUrl;
 import cx.study.auction.dao.AuctionRepository;
 import cx.study.auction.dao.AuctionTypeRepository;
 import cx.study.auction.dao.CustomerRepository;
+import cx.study.auction.dao.ImageUrlRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -17,7 +19,9 @@ import javax.annotation.Resource;
 import javax.persistence.Transient;
 import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -32,6 +36,8 @@ public class AuctionService {
     private AuctionTypeRepository auctionTypeRepository;
     @Resource
     private CustomerRepository customerRepository;
+    @Resource
+    private ImageUrlRepository imageUrlRepository;
     public Page<Auction> findAll(int start, int length, String query){
         int page = start/length;
         Sort sort = new Sort(Sort.Direction.DESC,"updateTime");
@@ -40,22 +46,34 @@ public class AuctionService {
             @Override
             public Predicate toPredicate(Root<Auction> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 if (!StringUtils.isEmpty(query)){
-                    Path<String> typeName = root.get("name");
-                    criteriaQuery.where(criteriaBuilder.like(typeName,"%"+query+"%"));
+                    Path<String> name = root.get("name");
+                    Path<String> typeName = root.get("type").get("typeName");
+                    Predicate predicate1 = criteriaBuilder.like(name, "%" + query + "%");
+                    Predicate predicate2 = criteriaBuilder.like(typeName, "%" + query + "%");
+                    criteriaQuery.where(criteriaBuilder.or(predicate1,predicate2));
                 }
                 return null;
             }
         },pageRequest);
     }
     @Transactional
-    public Auction add(Auction auction){
+    public Auction add(Auction auction,String urls){
         AuctionType type = auctionTypeRepository.findOne(auction.getTypeId());
         Customer customer = customerRepository.findOne(auction.getCustomerId());
         auction.setCreateTime(new Date().getTime());
         auction.setUpdateTime(new Date().getTime());
         auction.setType(type);
         auction.setCustomer(customer);
-        return auctionRepository.save(auction);
+        Auction save = auctionRepository.save(auction);
+        urls = urls.substring(1,urls.length());
+        String[] split = urls.split(",");
+        for (String url : split){
+            ImageUrl imageUrl = new ImageUrl();
+            imageUrl.setUrl(url);
+            imageUrl.setAuction(save);
+            imageUrlRepository.save(imageUrl);
+        }
+        return save;
     }
     @Transactional
     public Auction update(Auction auction){
