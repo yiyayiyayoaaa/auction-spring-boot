@@ -42,7 +42,7 @@
 				<th >ID</th>
 				<th >名称</th>
 				<th >类别</th>
-				<!--<th>来源</th>-->
+				<th>图片</th>
 				<th>起拍价</th>
 				<th>估价</th>
 				<th>增幅</th>
@@ -94,16 +94,36 @@
                 { "data": "id" },
                 { "data": "name" },
                 { "data": "type.typeName" },
-//                { "data": "customer.name" },
+                { "data": "id" ,"render":function (data,type,row,meta) {
+                    return "<a href='javascript:;' onclick='picture_show(this)'>查看</a>"
+                }},
                 { "data": "startPrice" },
                 { "data": "appraisedPrice" },
                 { "data": "bidIncrements" },
                 { "data": "hammerPrice" },
                 { "data": "deposit" },
-                { "data": "status" },
+                { "data": "status","render":function (data,type,row,meta) {
+                    var text;
+                    switch (data){
+                        case 0:text = "已登记";break;
+                        case 1:text = "待拍卖";break;
+                        case 2:text = "拍卖中";break;
+                        case 3:text = "已成交";break;
+                        case 4:text = "已流拍";break;
+                        case 5:text = "其他";break;
+                        case 6:text = "已下架";break;
+                        case 7:text = "已取消";break;
+                    }
+                    return "<span class='label label-success radius'>"+text+"</span>" }},
                 { "data": "startTime" , "render": function( data, type, row, meta) {
+                    if(data == 0 || data==null){
+                        return ""
+                    }
                     return new Date(data).toLocaleString();}},
                 { "data": "endTime" , "render": function( data, type, row, meta) {
+                    if(data == 0 || data==null){
+                        return ""
+                    }
                     return new Date(data).toLocaleString();}},
 //                { "data": "createTime" , "render": function( data, type, row, meta) {
 //                    return new Date(data).toLocaleString();}},
@@ -111,20 +131,101 @@
 //                    return new Date(data).toLocaleString();} },
                 { "targets": -1,
                     "data": null,
-                    "defaultContent": "<a title='编辑' href='javascript:;' onclick='edit(this)' class='ml-5' style='text-decoration:none'><i class='Hui-iconfont'>&#xe6df;</i></a> <a title='删除' href='javascript:;' onclick='del(this)' class='ml-5' style='text-decoration:none'><i class='Hui-iconfont'>&#xe6e2;</i></a>"
+                    "defaultContent":  "<a style='text-decoration:none' onClick='option(this)' class='ml-5' href='javascript:;' title='设置'><i class='Hui-iconfont'>&#xe603;</i></a>"+
+                    "<a title='编辑' href='javascript:;' onclick='edit(this)' class='ml-5' style='text-decoration:none'><i class='Hui-iconfont'>&#xe6df;</i></a> " +
+                    "<a title='删除' href='javascript:;' onclick='del(this)' class='ml-5' style='text-decoration:none'><i class='Hui-iconfont'>&#xe6e2;</i></a>"
                 }
             ]
         } );
     } );
-/*产品-添加*/
-function product_add(){
+
+/*图片-编辑*/
+function picture_show(obj){
+    var id =  $(obj).parent("td").parent("tr").children("td:eq(1)").text();
+    var index = layer.open({
+        type: 2,
+        title: "图片",
+        content: "picture-show/" + id
+    });
+    layer.full(index);
+}
+/*添加*/
+function add(){
 	var index = layer.open({
 		type: 2,
-		title: "添加商品",
-		content: "auction-add"
+		title: "添加拍品",
+		content: "auction-add",
+        end: function () {
+            location.reload();
+        }
 	});
 	layer.full(index);
 }
+    /*编辑*/
+    function edit(obj){
+        var id =  $(obj).parent("td").parent("tr").children("td:eq(1)").text();
+        var index = layer.open({
+            type: 2,
+            title: "编辑",
+            content: "auction-edit/" + id,
+            end: function () {
+                location.reload();
+            }
+        });
+        layer.full(index);
+
+    }
+
+	/*删除*/
+    function del(obj){
+        var id =  $(obj).parent("td").parent("tr").children("td:eq(1)").text();
+        layer.confirm('确认要删除吗？',function(index){
+            $.ajax({
+                type: 'POST',
+                url: 'delete-auction',
+                dataType: 'json',
+                data:{
+                    id:id
+                },
+                success: function(data){
+                    layer.msg('已删除!',{icon:1,time:1000});
+                    location.reload();
+                },
+                error:function(data) {
+                    console.log(data.msg);
+                }
+            });
+        });
+    }
+
+    function delete_batch() {
+        var s = "";
+        $("input:checkbox[name=ck-id]:checked").each(function (i) {
+            s += (','+ $(this).parent("td").parent("tr").children("td:eq(1)").text());
+        });
+        if (s==""){
+            return;
+        }
+        layer.confirm('确认要删除这些数据吗？',function(index){
+            $.ajax({
+                type: 'POST',
+                url: 'delete-batch-auction',
+                data:{
+                    ids:s
+                },
+                dataType: 'json',
+                success: function(data){
+                    layer.msg('已删除!',{icon:1,time:1000});
+                    location.reload();
+                },
+                error:function(data) {
+                    console.log(data.msg);
+                }
+            });
+        });
+    }
+
+
 /*产品-查看*/
 function product_show(title,url,id){
 	var index = layer.open({
@@ -178,16 +279,6 @@ function product_shenqing(obj,id){
 	$(obj).parents("tr").find(".td-status").html('<span class="label label-default radius">待审核</span>');
 	$(obj).parents("tr").find(".td-manage").html("");
 	layer.msg('已提交申请，耐心等待审核!', {icon: 1,time:2000});
-}
-
-/*产品-编辑*/
-function product_edit(){
-	var index = layer.open({
-		type: 2,
-		title: "编辑商品",
-		content: "auction-edit"
-	});
-	layer.full(index);
 }
 
 /*产品-删除*/

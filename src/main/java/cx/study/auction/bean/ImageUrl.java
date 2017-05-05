@@ -3,10 +3,7 @@ package cx.study.auction.bean;
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 /**
  *
@@ -43,4 +40,5 @@ public class ImageUrl {
     public void setAuction(Auction auction) {
         this.auction = auction;
     }
+
 }

@@ -56,6 +56,10 @@ public class AuctionService {
             }
         },pageRequest);
     }
+
+    public Auction findById(Integer id){
+        return auctionRepository.findOne(id);
+    }
     @Transactional
     public Auction add(Auction auction,String urls){
         AuctionType type = auctionTypeRepository.findOne(auction.getTypeId());
@@ -65,21 +69,42 @@ public class AuctionService {
         auction.setType(type);
         auction.setCustomer(customer);
         Auction save = auctionRepository.save(auction);
-        urls = urls.substring(1,urls.length());
-        String[] split = urls.split(",");
-        for (String url : split){
-            ImageUrl imageUrl = new ImageUrl();
-            imageUrl.setUrl(url);
-            imageUrl.setAuction(save);
-            imageUrlRepository.save(imageUrl);
-        }
+        saveImageUrl(urls, save);
         return save;
     }
     @Transactional
-    public Auction update(Auction auction){
+    public Auction update(Auction auction,String urls){
+        AuctionType type = auctionTypeRepository.findOne(auction.getTypeId());
+        Customer customer = customerRepository.findOne(auction.getCustomerId());
         Auction one = auctionRepository.findOne(auction.getId());
         auction.setCreateTime(one.getCreateTime());
+        auction.setStartTime(one.getStartTime());
+        auction.setEndTime(one.getEndTime());
         auction.setUpdateTime(new Date().getTime());
-        return auctionRepository.save(auction);
+        auction.setType(type);
+        auction.setCustomer(customer);
+        Auction save = auctionRepository.save(auction);
+        saveImageUrl(urls, save);
+        return save;
     }
+
+    private void saveImageUrl(String urls, Auction save) {
+        if (!StringUtils.isEmpty(urls)){
+            urls = urls.substring(1,urls.length());
+            String[] split = urls.split(",");
+            for (String url : split){
+                ImageUrl imageUrl = new ImageUrl();
+                imageUrl.setUrl(url);
+                imageUrl.setAuction(save);
+                imageUrlRepository.save(imageUrl);
+            }
+        }
+    }
+
+    @Transactional
+    public void delete(String id){
+        auctionRepository.delete(Integer.parseInt(id));
+    }
+
+
 }

@@ -31,10 +31,10 @@ public class Auction {
     private int status;
     @Column(length = 500)
     private String description;
-    @OneToMany(mappedBy = "auction")
+    @OneToMany(cascade = {CascadeType.REMOVE},mappedBy = "auction")
     private List<ImageUrl> imageUrls;
-    private long startTime;
-    private long endTime;
+    private Long startTime;
+    private Long endTime;
     private long createTime;
     private long updateTime;
 
@@ -134,19 +134,19 @@ public class Auction {
         this.updateTime = updateTime;
     }
 
-    public long getStartTime() {
+    public Long getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(long startTime) {
+    public void setStartTime(Long startTime) {
         this.startTime = startTime;
     }
 
-    public long getEndTime() {
+    public Long getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(long endTime) {
+    public void setEndTime(Long endTime) {
         this.endTime = endTime;
     }
 

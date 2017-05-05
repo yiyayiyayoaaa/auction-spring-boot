@@ -1,9 +1,14 @@
 package cx.study.auction.controller;
 
+import cx.study.auction.bean.Auction;
 import cx.study.auction.bean.AuctionType;
 import cx.study.auction.bean.Customer;
+import cx.study.auction.bean.ImageUrl;
+import cx.study.auction.dao.ImageUrlRepository;
+import cx.study.auction.service.AuctionService;
 import cx.study.auction.service.AuctionTypeService;
 import cx.study.auction.service.CustomerService;
+import cx.study.auction.service.ImageUrlService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -21,6 +26,10 @@ public class HtmlController {
     private AuctionTypeService auctionTypeService;
     @Resource
     private CustomerService customerService;
+    @Resource
+    private AuctionService auctionService;
+    @Resource
+    private ImageUrlService imageUrlService;
     @GetMapping(value = "/index")
     public ModelAndView toIndex(){
         return new ModelAndView("index");
@@ -64,6 +73,25 @@ public class HtmlController {
         modelAndView.addObject("customers",customers);
         return modelAndView;
     }
+    @GetMapping(value = "/auction-edit/{id}")
+    public ModelAndView toAuctionEdit(@PathVariable Integer id){
+        ModelAndView modelAndView = new ModelAndView("auction-edit");
+        List<AuctionType> types = auctionTypeService.findAll();
+        List<Customer> customers = customerService.findAll();
+        Auction auction = auctionService.findById(id);
+        modelAndView.addObject("types",types);
+        modelAndView.addObject("customers",customers);
+        modelAndView.addObject("auction",auction);
+        return modelAndView;
+    }
+    @GetMapping("/picture-show/{id}")
+    public ModelAndView toPictureShow(@PathVariable Integer id){
+        ModelAndView modelAndView = new ModelAndView("picture-show");
+        List<ImageUrl> imageUrls = imageUrlService.findByAuction(id);
+        modelAndView.addObject("images",imageUrls);
+        return modelAndView;
+    }
+
 
     /* 用户管理 */
     @GetMapping(value = "/member")
