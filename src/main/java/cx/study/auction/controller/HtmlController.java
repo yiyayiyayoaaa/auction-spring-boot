@@ -91,6 +91,13 @@ public class HtmlController {
         modelAndView.addObject("images",imageUrls);
         return modelAndView;
     }
+    @GetMapping("/auction-setting/{id}")
+    public ModelAndView toAuctionSetting(@PathVariable Integer id){
+        ModelAndView modelAndView = new ModelAndView("auction-setting");
+        Auction auction = auctionService.findById(id);
+        modelAndView.addObject("auction",auction);
+        return modelAndView;
+    }
 
 
     /* 用户管理 */
@@ -114,5 +121,11 @@ public class HtmlController {
         ModelAndView modelAndView = new ModelAndView("customer-edit");
         modelAndView.addObject("customer",customer);
         return modelAndView;
+    }
+
+    /* 管理员*/
+    @GetMapping("/admin")
+    public ModelAndView toAdminList(){
+        return new ModelAndView("admin-list");
     }
 }

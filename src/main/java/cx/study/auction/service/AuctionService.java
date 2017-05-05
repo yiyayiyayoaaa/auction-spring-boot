@@ -4,7 +4,6 @@ import cx.study.auction.bean.Auction;
 import cx.study.auction.bean.AuctionType;
 import cx.study.auction.bean.Customer;
 import cx.study.auction.bean.ImageUrl;
-import cx.study.auction.constants.Constants;
 import cx.study.auction.constants.Constants.AuctionStatus;
 import cx.study.auction.dao.AuctionRepository;
 import cx.study.auction.dao.AuctionTypeRepository;
@@ -18,10 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import javax.persistence.Transient;
 import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -111,6 +108,20 @@ public class AuctionService {
         auctionRepository.delete(Integer.parseInt(id));
     }
 
+    @Transactional
+    public Auction setting(Integer status, Integer id,Date startTime,Date endTime){
+        Auction one = auctionRepository.findOne(id);
+        one.setStatus(status);
+
+        if (status.equals(AuctionStatus.WAIT_AUCTION) || status.equals(AuctionStatus.AUCTION)){
+            //只有 待拍卖 和 正在拍卖需要设置时间
+            one.setStartTime(startTime.getTime());
+            one.setEndTime(endTime.getTime());
+            doAuction(one);
+        }
+        one.setUpdateTime(new Date().getTime());
+        return auctionRepository.save(one);
+    }
     public void startTimer(){
         List<Auction> auctions = auctionRepository.findByStatus(AuctionStatus.WAIT_AUCTION);
         auctions.addAll(auctionRepository.findByStatus(AuctionStatus.AUCTION));
@@ -118,8 +129,8 @@ public class AuctionService {
             doAuction(auction);
         }
     }
-
-    private void doAuction(final Auction auction){
+    @Transactional
+    public void doAuction(final Auction auction){
         long startTime = auction.getStartTime();
         long endTime = auction.getEndTime();
         if (System.currentTimeMillis() < startTime){

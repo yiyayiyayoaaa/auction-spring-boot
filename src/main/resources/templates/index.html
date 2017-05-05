@@ -45,7 +45,7 @@
 		<!--</nav>-->
 			<nav id="Hui-userbar" class="nav navbar-nav navbar-userbar hidden-xs">
 				<ul class="cl">
-					<li th:text="${session.admin.level}==1?'超级管理员':'普通管理员'"></li>
+					<li th:text="${session.admin.level} eq '1'?'超级管理员':'普通管理员'"></li>
 					<li class="dropDown dropDown_hover">
 						<a href="#" class="dropDown_A"><span th:text="${session.admin.username}"></span><i class="Hui-iconfont">&#xe6d5;</i></a>
 						<ul class="dropDown-menu menu radius box-shadow">
@@ -92,7 +92,7 @@
 			<dt><i class="Hui-iconfont">&#xe620;</i> 拍品管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
 			<dd>
 				<ul>
-					<li><a data-href="auction" data-title="拍品管理" href="javascript:void(0)">拍品管理</a></li>
+					<li><a data-href="auction" data-title="拍品列表" href="javascript:void(0)">拍品列表</a></li>
 					<li><a data-href="auction-category" data-title="分类管理" href="javascript:void(0)">分类管理</a></li>
 			</ul>
 		</dd>
@@ -115,21 +115,23 @@
 			<dt><i class="Hui-iconfont">&#xe622;</i> 交易管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
 			<dd>
 				<ul>
-					<li><a data-href="http://h-ui.duoshuo.com/admin/" data-title="订单管理" href="javascript:;">订单管理</a></li>
-					<li><a data-href="feedback-list" data-title="意见反馈" href="javascript:void(0)">意见反馈</a></li>
+					<li><a data-href="order" data-title="订单管理" href="javascript:;">订单管理</a></li>
+					<!--<li><a data-href="feedback-list" data-title="意见反馈" href="javascript:void(0)">意见反馈</a></li>-->
 				</ul>
 			</dd>
 		</dl>
-		<dl id="menu-admin">
-			<dt><i class="Hui-iconfont">&#xe62d;</i> 管理员管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
-			<dd>
-				<ul>
-					<li><a data-href="admin-role" data-title="角色管理" href="javascript:void(0)">角色管理</a></li>
-					<li><a data-href="admin-permission" data-title="权限管理" href="javascript:void(0)">权限管理</a></li>
-					<li><a data-href="admin-list" data-title="管理员列表" href="javascript:void(0)">管理员列表</a></li>
-			</ul>
-		</dd>
-	</dl>
+		<div th:switch="${session.admin.level}">
+			<dl id="menu-admin" th:case="1">
+				<dt><i class="Hui-iconfont">&#xe62d;</i> 管理员管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+				<dd>
+					<ul>
+						<!--<li><a data-href="admin-role" data-title="角色管理" href="javascript:void(0)">角色管理</a></li>-->
+						<!--<li><a data-href="admin-permission" data-title="权限管理" href="javascript:void(0)">权限管理</a></li>-->
+						<li><a data-href="admin" data-title="管理员列表" href="javascript:void(0)">管理员列表</a></li>
+					</ul>
+				</dd>
+			</dl>
+		</div>
 		<dl id="menu-tongji">
 			<dt><i class="Hui-iconfont">&#xe61a;</i> 系统统计<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
 			<dd>

@@ -82,4 +82,13 @@ public class AuctionController {
         return new HttpResult<>(0,"删除成功",null);
     }
 
+    @PostMapping("/setting-auction")
+    public HttpResult<String> settingAuction(Integer id,Integer status,@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date startTime,
+                                             @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date endTime){
+        Auction auction = auctionService.setting(status, id, startTime, endTime);
+        if (auction != null){
+            return new HttpResult<>(0,"设置成功",null);
+        }
+        return new HttpResult<>(1,"设置失败",null);
+    }
 }
