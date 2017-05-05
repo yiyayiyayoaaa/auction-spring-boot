@@ -4,6 +4,8 @@ import cx.study.auction.bean.Auction;
 import cx.study.auction.bean.AuctionType;
 import cx.study.auction.bean.Customer;
 import cx.study.auction.bean.ImageUrl;
+import cx.study.auction.constants.Constants;
+import cx.study.auction.constants.Constants.AuctionStatus;
 import cx.study.auction.dao.AuctionRepository;
 import cx.study.auction.dao.AuctionTypeRepository;
 import cx.study.auction.dao.CustomerRepository;
@@ -22,6 +24,9 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -106,5 +111,81 @@ public class AuctionService {
         auctionRepository.delete(Integer.parseInt(id));
     }
 
+    public void startTimer(){
+        List<Auction> auctions = auctionRepository.findByStatus(AuctionStatus.WAIT_AUCTION);
+        auctions.addAll(auctionRepository.findByStatus(AuctionStatus.AUCTION));
+        for (Auction auction : auctions){
+            doAuction(auction);
+        }
+    }
+
+    private void doAuction(final Auction auction){
+        long startTime = auction.getStartTime();
+        long endTime = auction.getEndTime();
+        if (System.currentTimeMillis() < startTime){
+            //还未开始
+            auction.setStatus(AuctionStatus.WAIT_AUCTION);
+            auction.setUpdateTime(new Date().getTime());
+            Auction save = auctionRepository.save(auction);
+            start(save,startTime);
+            end(save,endTime);
+        } else if (startTime <= System.currentTimeMillis() && System.currentTimeMillis() < endTime){
+            //正在进行
+            auction.setStatus(AuctionStatus.AUCTION);
+            auction.setUpdateTime(new Date().getTime());
+            Auction save = auctionRepository.save(auction);
+            end(save,endTime);
+        } else {
+            //已经结束
+            doEnd(auction);
+        }
+    }
+
+    private void start(Auction auction,long startTime){
+        long delay = startTime - System.currentTimeMillis();
+        startScheduledExecutorService(delay, new Runnable() {
+            @Override
+            public void run() {
+                doStart(auction);
+            }
+        });
+
+    }
+    private void end(Auction auction ,long endTime){
+        long delay = endTime - System.currentTimeMillis();
+        startScheduledExecutorService(delay, new Runnable() {
+            @Override
+            public void run() {
+                doEnd(auction);
+            }
+        });
+    }
+
+    private void doStart(Auction auction){
+        auction.setStatus(AuctionStatus.AUCTION);
+        auction.setUpdateTime(new Date().getTime());
+        auctionRepository.save(auction);
+    }
+
+    private void doEnd(Auction auction){
+        Auction one = auctionRepository.findOne(auction.getId());
+        double hammerPrice = one.getHammerPrice();
+        if (hammerPrice > 0d){
+            //成交
+            one.setStatus(AuctionStatus.SUCCESS);
+            //生成订单
+            //返还保证金
+        } else {
+            //流拍
+            one.setStatus(AuctionStatus.UNSOLD);
+        }
+        one.setUpdateTime(new Date().getTime());
+        auctionRepository.save(one);
+    }
+    private void startScheduledExecutorService(long delay,Runnable runnable){
+        ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+        service.schedule(runnable,delay, TimeUnit.MILLISECONDS);
+        System.out.println("开始定时任务：" + new Date(System.currentTimeMillis() + delay));
+    }
 
 }
