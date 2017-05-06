@@ -58,6 +58,39 @@ public class AuctionService {
             }
         },pageRequest);
     }
+    public List<Auction> findByStatus(int status){
+        return findByStatusAndType(null,status);
+    }
+    public List<Auction> findByStatusAndType(Integer typeId,int status){
+        return auctionRepository.findAll(new Specification<Auction>() {
+            @Override
+            public Predicate toPredicate(Root<Auction> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                Path<Integer> s = root.get("status");
+                Predicate predicate1 = criteriaBuilder.equal(s, status);
+                if (typeId != null){
+                    Path<Integer> id = root.get("type").get("id");
+                    Predicate predicate2 = criteriaBuilder.equal(id, typeId);
+                    criteriaQuery.where(criteriaBuilder.and(predicate1,predicate2));
+                }
+                criteriaQuery.where(predicate1);
+                return null;
+            }
+        });
+    }
+
+    public Page<Auction> findAll(int start,int length,int status){
+        int page = start/length;
+        Sort sort = new Sort(Sort.Direction.ASC,"startTime");
+        PageRequest pageRequest = new PageRequest(page,length,sort);
+        return auctionRepository.findAll(new Specification<Auction>() {
+            @Override
+            public Predicate toPredicate(Root<Auction> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                Path<Integer> s = root.get("status");
+                criteriaQuery.where(criteriaBuilder.equal(s,status));
+                return null;
+            }
+        },pageRequest);
+    }
 
     public Auction findById(Integer id){
         return auctionRepository.findOne(id);

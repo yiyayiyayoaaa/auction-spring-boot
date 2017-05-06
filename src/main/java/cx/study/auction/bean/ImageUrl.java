@@ -2,6 +2,8 @@ package cx.study.auction.bean;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.gson.annotations.Expose;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 
 import javax.persistence.*;
 
@@ -12,10 +14,11 @@ import javax.persistence.*;
 @Entity
 public class ImageUrl {
     @Id
-    @GeneratedValue
+    @GeneratedValue @Expose
     private Integer id;
+    @Expose
     private String url;
-    @ManyToOne @JsonIgnore
+    @ManyToOne
     private Auction auction;
     public Integer getId() {
         return id;

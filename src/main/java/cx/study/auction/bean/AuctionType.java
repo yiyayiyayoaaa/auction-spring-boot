@@ -1,5 +1,7 @@
 package cx.study.auction.bean;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -11,11 +13,15 @@ import javax.persistence.Id;
 @Entity
 public class AuctionType {
     @Id
-    @GeneratedValue
+    @GeneratedValue @Expose
     private Integer id;
+    @Expose
     private String typeName;
+    @Expose
     private int status;   //是否启用，0,启用 1 不启用
+    @Expose
     private long createTime;
+    @Expose
     private long updateTime;
 
     public Integer getId() {

@@ -1,5 +1,7 @@
 package cx.study.auction.bean;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -11,31 +13,41 @@ import java.util.List;
 public class Auction {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue @Expose
     private Integer id;
+    @Expose
     private String name;
-    @ManyToOne
+    @ManyToOne @Expose
     private AuctionType type;
     @Transient
     private Integer typeId;
-    @ManyToOne
+    @ManyToOne @Expose
     private Customer customer;
     @Transient
     private Integer customerId;
-    @Column()
+    @Column() @Expose
     private double startPrice; //起拍价
+    @Expose
     private double appraisedPrice; //估价
+    @Expose
     private double bidIncrements; //竞价增幅
+    @Expose
     private double hammerPrice; //成交价
+    @Expose
     private double deposit;      //保证金
+    @Expose
     private int status;
-    @Column(length = 500)
+    @Column(length = 500) @Expose
     private String description;
-    @OneToMany(cascade = {CascadeType.REMOVE},mappedBy = "auction")
+    @OneToMany(cascade = {CascadeType.REMOVE},mappedBy = "auction") @Expose
     private List<ImageUrl> imageUrls;
+    @Expose
     private Long startTime;
+    @Expose
     private Long endTime;
+    @Expose
     private long createTime;
+    @Expose
     private long updateTime;
 
     public Integer getId() {

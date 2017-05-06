@@ -14,3 +14,6 @@ spring:
   thymeleaf:
     cache: false
     mode: LEGACYHTML5
+  http:
+    converters:
+      preferred-json-mapper: gson

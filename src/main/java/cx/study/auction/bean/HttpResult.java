@@ -1,25 +1,27 @@
 package cx.study.auction.bean;
 
+import com.google.gson.annotations.Expose;
+
 /**
  *
  * Created by chengxiao on 2017/4/30.
  */
 public class HttpResult<T> {
-
+    @Expose
     private Integer code;
-
+    @Expose
     private String msg;
-
-    private T data;
+    @Expose
+    private T obj;
 
     public HttpResult(){
 
     }
 
-    public HttpResult(Integer code, String msg, T data) {
+    public HttpResult(Integer code, String msg, T obj) {
         this.code = code;
         this.msg = msg;
-        this.data = data;
+        this.obj = obj;
     }
 
     public Integer getCode() {
@@ -38,11 +40,11 @@ public class HttpResult<T> {
         this.msg = msg;
     }
 
-    public T getData() {
-        return data;
+    public T getObj() {
+        return obj;
     }
 
-    public void setData(T data) {
-        this.data = data;
+    public void setObj(T obj) {
+        this.obj = obj;
     }
 }

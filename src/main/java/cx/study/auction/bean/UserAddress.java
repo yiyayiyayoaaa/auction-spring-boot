@@ -1,5 +1,7 @@
 package cx.study.auction.bean;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -13,12 +15,15 @@ import javax.persistence.ManyToOne;
 public class UserAddress {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue @Expose
     private Integer id;
+    @Expose
     private String name;
+    @Expose
     private String phone;
+    @Expose
     private String address;
-    @ManyToOne
+    @ManyToOne @Expose
     private User user;
     public Integer getId() {
         return id;

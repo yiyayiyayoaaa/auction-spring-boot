@@ -1,9 +1,8 @@
 package cx.study.auction.bean;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import com.google.gson.annotations.Expose;
+
+import javax.persistence.*;
 import java.util.List;
 
 /**
@@ -13,18 +12,28 @@ import java.util.List;
 @Entity
 public class User {
     @Id
-    @GeneratedValue
+    @GeneratedValue @Expose
     private Integer id;
+    @Expose
     private String username;
+    @Expose
     private String password;
+    @Expose
     private String nickname;
+    @Expose
     private String avatar;  //头像
+    @Expose
     private int gender;
+    @Expose
     private long birth;
+    @Expose
     private double account; //账户
+    @Expose
     private int status;   //状态 0，使用中 ，1 停用
     @OneToMany(mappedBy = "user")
     private List<UserAddress> addresses;
+    @OneToMany(mappedBy = "user")
+    private List<OrderInfo> orders;
     private long createTime;
     private long updateTime;
 
@@ -106,5 +115,29 @@ public class User {
 
     public void setUpdateTime(long updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public double getAccount() {
+        return account;
+    }
+
+    public void setAccount(double account) {
+        this.account = account;
+    }
+
+    public List<UserAddress> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(List<UserAddress> addresses) {
+        this.addresses = addresses;
+    }
+
+    public List<OrderInfo> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<OrderInfo> orders) {
+        this.orders = orders;
     }
 }
