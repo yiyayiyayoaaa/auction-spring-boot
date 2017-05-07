@@ -40,6 +40,8 @@ public class AuctionService {
     private CustomerRepository customerRepository;
     @Resource
     private ImageUrlRepository imageUrlRepository;
+    @Resource
+    private OrderService orderService;
     public Page<Auction> findAll(int start, int length, String query){
         int page = start/length;
         Sort sort = new Sort(Sort.Direction.DESC,"updateTime");
@@ -71,6 +73,7 @@ public class AuctionService {
                     Path<Integer> id = root.get("type").get("id");
                     Predicate predicate2 = criteriaBuilder.equal(id, typeId);
                     criteriaQuery.where(criteriaBuilder.and(predicate1,predicate2));
+                    return null;
                 }
                 criteriaQuery.where(predicate1);
                 return null;
@@ -106,6 +109,11 @@ public class AuctionService {
         Auction save = auctionRepository.save(auction);
         saveImageUrl(urls, save);
         return save;
+    }
+    @Transactional
+    public Auction update(Auction auction){
+        auction.setUpdateTime(System.currentTimeMillis());
+        return auctionRepository.save(auction);
     }
     @Transactional
     public Auction update(Auction auction,String urls){
@@ -218,6 +226,7 @@ public class AuctionService {
             //成交
             one.setStatus(AuctionStatus.SUCCESS);
             //生成订单
+            orderService.createOrder(one);
             //返还保证金
         } else {
             //流拍

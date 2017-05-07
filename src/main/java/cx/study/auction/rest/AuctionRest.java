@@ -3,11 +3,14 @@ package cx.study.auction.rest;
 import com.google.gson.JsonObject;
 import cx.study.auction.bean.Auction;
 import cx.study.auction.bean.AuctionType;
+import cx.study.auction.bean.BidRecord;
 import cx.study.auction.bean.HttpResult;
 import cx.study.auction.constants.Constants;
 import cx.study.auction.constants.Constants.AuctionStatus;
 import cx.study.auction.service.AuctionService;
 import cx.study.auction.service.AuctionTypeService;
+import cx.study.auction.service.BidRecordService;
+import cx.study.auction.service.DepositService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +32,10 @@ public class AuctionRest {
     private AuctionService auctionService;
     @Resource
     private AuctionTypeService auctionTypeService;
+    @Resource
+    private DepositService depositService;
+    @Resource
+    private BidRecordService bidRecordService;
     @RequestMapping("/findCommodityById")
     public HttpResult<Auction> findById(@RequestBody()JsonObject json){
         int id = json.get("commodityId").getAsInt();
@@ -67,14 +74,28 @@ public class AuctionRest {
     }
 
     @RequestMapping("/bid")
-    public void bid(@RequestBody()JsonObject json) throws Exception {
+    public HttpResult<BidRecord> bid(@RequestBody()JsonObject json) throws Exception {
         int commodityId = json.get("commodityId").getAsInt();
         int userId = json.get("userId").getAsInt();
         double price = json.get("price").getAsDouble();
+        BidRecord bid = bidRecordService.bid(commodityId, userId, price);
+        if (bid != null){
+            return new HttpResult<>(0, "", bid);
+        }
+        return new HttpResult<>(1, "", null);
     }
 
     @RequestMapping("/bidRecords")
-    public void getBidRecord(@RequestBody()JsonObject json) throws Exception {
+    public HttpResult<List<BidRecord>> getBidRecord(@RequestBody()JsonObject json) throws Exception {
         int commodityId = json.get("commodityId").getAsInt();
+        List<BidRecord> records = bidRecordService.find(commodityId);
+        return new HttpResult<>(0, "", records);
+    }
+
+    @RequestMapping("/auction")
+    public HttpResult<List<Auction>> auction(@RequestBody()JsonObject json) throws Exception {
+        int userId = json.get("userId").getAsInt();
+        List<Auction> auctions = depositService.findByUserId(userId);
+        return new HttpResult<>(0, "", auctions);
     }
 }

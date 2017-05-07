@@ -14,6 +14,8 @@ public class OrderInfo {
     @GeneratedValue @Expose
     private Integer id;
     @Expose
+    private String url;
+    @Expose
     private String orderNum;
     @OneToOne(targetEntity = Auction.class) @Expose
     private Auction auction;
@@ -118,5 +120,13 @@ public class OrderInfo {
 
     public void setUpdateTime(long updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

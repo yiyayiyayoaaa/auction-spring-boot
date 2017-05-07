@@ -36,7 +36,7 @@ public class AdminController {
                 session.setAttribute("admin",mAdmin);
                 admin.setUpdateTime(new Date().getTime());
                 admin.setIp(getIpAddr(request));
-                adminService.AdminUpdate(admin);
+                adminService.update(admin);
                 return "redirect:index";
             }
         }

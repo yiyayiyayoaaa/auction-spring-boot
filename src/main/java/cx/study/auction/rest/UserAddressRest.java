@@ -40,7 +40,7 @@ public class UserAddressRest {
         String[] strings = address.split("@");
         String name = strings[0];
         String phone = strings[1];
-        String addr = strings[2] + strings[3];
+        String addr = strings[2] + "@" +strings[3];
         UserAddress userAddress = new UserAddress();
         userAddress.setName(name);
         userAddress.setPhone(phone);

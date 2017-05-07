@@ -1,5 +1,7 @@
 package cx.study.auction.bean;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -12,15 +14,18 @@ import javax.persistence.Id;
 public class Customer {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue @Expose
     private Integer id;
-
+    @Expose
     private String name;
+    @Expose
     private String phone;
+    @Expose
     private String remarks;
 
-
+    @Expose
     private long createTime;
+    @Expose
     private long updateTime;
     public Integer getId() {
         return id;

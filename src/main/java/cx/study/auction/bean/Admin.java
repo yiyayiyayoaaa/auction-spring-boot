@@ -1,5 +1,7 @@
 package cx.study.auction.bean;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -12,15 +14,20 @@ import java.io.Serializable;
 @Entity
 public class Admin implements Serializable,Cloneable{
     @Id
-    @GeneratedValue
+    @GeneratedValue @Expose
     private Integer id;
+    @Expose
     private String username;
     private String password;
+    @Expose
     private int level;
+    @Expose
     private int status;   //状态 0，使用中 ，1 停用
-
+    @Expose
     private String ip;
+    @Expose
     private long createTime;
+    @Expose
     private long updateTime;
 
     @Override

@@ -28,7 +28,7 @@ public class AdminService {
         return adminRepository.findAdminByUsernameAndPassword(username,password);
     }
 
-    public Admin AdminUpdate(Admin admin){
+    public Admin update(Admin admin){
         return adminRepository.save(admin);
     }
 

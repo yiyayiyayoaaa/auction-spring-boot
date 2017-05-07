@@ -34,7 +34,9 @@ public class User {
     private List<UserAddress> addresses;
     @OneToMany(mappedBy = "user")
     private List<OrderInfo> orders;
+    @Expose
     private long createTime;
+    @Expose
     private long updateTime;
 
     public Integer getId() {

@@ -66,8 +66,9 @@
 <script type="text/javascript" src="lib/datatables/1.10.0/jquery.dataTables.min.js"></script> 
 <script type="text/javascript" src="lib/laypage/1.2/laypage.js"></script>
 <script type="text/javascript">
+	var dataTable;
     $(document).ready(function() {
-        $('#table').DataTable( {
+        dataTable = $('#table').DataTable( {
             "aoColumnDefs": [
                 {"orderable":false,"aTargets":[0,1,2,3,4,5,6,7]}// 制定列不参与排序
             ],
@@ -110,6 +111,10 @@
             ]
         } );
     } );
+    
+    function reloadTable() {
+		dataTable.ajax.reload();
+    }
 /*
 	参数解释：
 	title	标题
@@ -130,7 +135,7 @@ function admin_del(obj,id){
 			url: '',
 			dataType: 'json',
 			success: function(data){
-				$(obj).parents("tr").remove();
+				reloadTable();
 				layer.msg('已删除!',{icon:1,time:1000});
 			},
 			error:function(data) {

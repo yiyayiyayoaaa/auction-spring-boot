@@ -26,4 +26,12 @@ public class Constants {
         int OFF = 6;             //下架
         int CANCEL = 7;         //取消
     }
+
+    public interface OrderStatus{
+        int WAIT_PAY = 0;
+        int WAIT_SEND = 1;
+        int WAIT_RECEIVED = 2;
+        int FINISH = 3;
+        int CANCEL = 4;
+    }
 }
