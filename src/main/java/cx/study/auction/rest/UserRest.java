@@ -111,4 +111,20 @@ public class UserRest {
             return new HttpResult<>(1,"请求失败",null);
         }
     }
+
+    @RequestMapping("/updateNickname")
+    public HttpResult<User> updateNickname(@RequestBody JsonObject jsonObject){
+        int id = jsonObject.get("id").getAsInt();
+        String nickname = jsonObject.get("nickname").getAsString();
+        User user = userService.updateNickname(id, nickname);
+        return new HttpResult<>(0,"",user);
+    }
+
+    @RequestMapping("/updateGender")
+    public HttpResult<User> updateGender(@RequestBody JsonObject jsonObject){
+        int id = jsonObject.get("id").getAsInt();
+        int gender = jsonObject.get("gender").getAsInt();
+        User user = userService.updateGender(id, gender);
+        return new HttpResult<>(0,"",user);
+    }
 }

@@ -82,4 +82,21 @@ public class UserService {
         one.setUpdateTime(System.currentTimeMillis());
         return userRepository.save(one);
     }
+
+    @Transactional
+    public User updateNickname(Integer id,String nickname){
+        User user = userRepository.findOne(id);
+        user.setNickname(nickname);
+        user.setUpdateTime(System.currentTimeMillis());
+        return userRepository.save(user);
+    }
+
+    @Transactional
+    public User updateGender(Integer id,int gender){
+        User user = userRepository.findOne(id);
+        user.setGender(gender);
+        user.setUpdateTime(System.currentTimeMillis());
+        return userRepository.save(user);
+    }
+
 }
