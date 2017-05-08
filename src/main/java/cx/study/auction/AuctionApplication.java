@@ -2,6 +2,7 @@ package cx.study.auction;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import cx.study.auction.controller.LoginInterceptor;
 import cx.study.auction.utils.NullStringToEmptyAdapterFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +10,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import java.util.List;
@@ -26,6 +28,12 @@ public class AuctionApplication extends WebMvcConfigurerAdapter{
 		messageConverter.setGson(gson);
 		converters.add(messageConverter);
 		logger.info("加载Gson");
+	}
+
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		registry.addInterceptor(new LoginInterceptor());
+		super.addInterceptors(registry);
 	}
 
 	public static void main(String[] args) {

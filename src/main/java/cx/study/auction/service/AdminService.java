@@ -12,6 +12,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import javax.persistence.criteria.*;
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -47,5 +48,44 @@ public class AdminService {
                 return null;
             }
         },pageRequest);
+    }
+
+    @Transactional //修改密码
+    public Admin updatePassword(Integer id,String password){
+        Admin admin = adminRepository.findOne(id);
+        admin.setPassword(password);
+        admin.setUpdateTime(System.currentTimeMillis());
+        return  adminRepository.save(admin);
+    }
+
+    @Transactional //重置密码
+    public Admin resetPassword(Integer id){
+        Admin admin = adminRepository.findOne(id);
+        admin.setPassword("123456");
+        admin.setUpdateTime(System.currentTimeMillis());
+        return  adminRepository.save(admin);
+    }
+
+    @Transactional
+    public Admin add(String username,int level){
+        Admin admin = new Admin();
+        admin.setUsername(username);
+        admin.setLevel(level);
+        admin.setCreateTime(System.currentTimeMillis());
+        return adminRepository.save(admin);
+    }
+
+    @Transactional
+    public void delete(String id){
+        adminRepository.delete(Integer.parseInt(id));
+    }
+
+    @Transactional
+    public void deleteBatch(String ids){
+        ids = ids.substring(1,ids.length());
+        String[] split = ids.split(",");
+        for (String id : split){
+            delete(id);
+        }
     }
 }

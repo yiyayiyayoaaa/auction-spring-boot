@@ -16,7 +16,6 @@ public class User {
     private Integer id;
     @Expose
     private String username;
-    @Expose
     private String password;
     @Expose
     private String nickname;

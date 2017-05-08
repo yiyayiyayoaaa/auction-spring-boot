@@ -2,14 +2,12 @@ package cx.study.auction.controller;
 
 import cx.study.auction.bean.Admin;
 import cx.study.auction.bean.Customer;
+import cx.study.auction.bean.HttpResult;
 import cx.study.auction.service.AdminService;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -68,4 +66,27 @@ public class AdminController {
         map.put("iTotalDisplayRecords",page.getTotalElements());
         return map;
     }
+
+    @RequestMapping("/update-password")
+    public HttpResult<String> updatePassword(HttpSession session,String password){
+        Admin admin = (Admin) session.getAttribute("admin");
+        Integer id = admin.getId();
+        Admin update = adminService.updatePassword(id, password);
+        if (update != null) {
+            return new HttpResult<>(0, "修改成功", null);
+        }
+        return new HttpResult<>(1, "修改失败", null);
+    }
+
+    @RequestMapping("/reset-password")
+    public HttpResult<String> resetPassword(Integer id){
+        Admin update = adminService.resetPassword(id);
+        if (update != null) {
+            return new HttpResult<>(0, "修改成功", null);
+        }
+        return new HttpResult<>(1, "修改失败", null);
+
+    }
+
+
 }
