@@ -29,8 +29,9 @@ public class OrderInfo {
     private long endTime;
     @Expose
     private int status;
-    @ManyToOne
+    @ManyToOne @Expose
     private User user;
+    @Expose
     private long createTime;
     private long updateTime;
 

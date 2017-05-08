@@ -78,7 +78,7 @@ public class OrderRest {
     public HttpResult<String> finish(@RequestBody()JsonObject json) throws Exception {
         int id = json.get("id").getAsInt();
         OrderInfo finish = orderService.finish(id);
-        if (finish == null){
+        if (finish != null){
             return new HttpResult<>(0,"请求成功",null);
         } else {
             return new HttpResult<>(1,"请求失败",null);

@@ -128,4 +128,9 @@ public class HtmlController {
     public ModelAndView toAdminList(){
         return new ModelAndView("admin-list");
     }
+
+    @GetMapping("/order")
+    public ModelAndView toOrderList(){
+        return new ModelAndView("order-list");
+    }
 }

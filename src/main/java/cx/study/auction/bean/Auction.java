@@ -1,6 +1,7 @@
 package cx.study.auction.bean;
 
 import com.google.gson.annotations.Expose;
+import org.springframework.context.annotation.Lazy;
 
 import javax.persistence.*;
 import java.util.List;
@@ -39,7 +40,7 @@ public class Auction {
     private int status;
     @Column(length = 500) @Expose
     private String description;
-    @OneToMany(cascade = {CascadeType.REMOVE},mappedBy = "auction") @Expose
+    @OneToMany(cascade = {CascadeType.REMOVE},mappedBy = "auction",fetch = FetchType.EAGER) @Expose
     private List<ImageUrl> imageUrls;
     @Expose
     private Long startTime;

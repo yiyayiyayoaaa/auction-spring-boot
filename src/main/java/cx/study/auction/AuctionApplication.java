@@ -2,6 +2,7 @@ package cx.study.auction;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import cx.study.auction.utils.NullStringToEmptyAdapterFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -19,7 +20,7 @@ public class AuctionApplication extends WebMvcConfigurerAdapter{
 	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
 		super.configureMessageConverters(converters);
 		GsonHttpMessageConverter messageConverter = new GsonHttpMessageConverter();
-        Gson gson = new GsonBuilder()
+        Gson gson = new GsonBuilder().registerTypeAdapterFactory(new NullStringToEmptyAdapterFactory<>())
                 .excludeFieldsWithoutExposeAnnotation()
                 .create();
 		messageConverter.setGson(gson);

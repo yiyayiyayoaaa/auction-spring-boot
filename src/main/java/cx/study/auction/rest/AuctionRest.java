@@ -80,9 +80,9 @@ public class AuctionRest {
         double price = json.get("price").getAsDouble();
         BidRecord bid = bidRecordService.bid(commodityId, userId, price);
         if (bid != null){
-            return new HttpResult<>(0, "", bid);
+            return new HttpResult<>(0, "出价成功", bid);
         }
-        return new HttpResult<>(1, "", null);
+        return new HttpResult<>(1, "出价失败", null);
     }
 
     @RequestMapping("/bidRecords")

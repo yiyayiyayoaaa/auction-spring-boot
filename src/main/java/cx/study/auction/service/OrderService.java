@@ -1,21 +1,24 @@
 package cx.study.auction.service;
 
-import cx.study.auction.bean.Auction;
-import cx.study.auction.bean.BidRecord;
-import cx.study.auction.bean.OrderInfo;
-import cx.study.auction.bean.User;
+import cx.study.auction.bean.*;
 import cx.study.auction.constants.Constants;
+import cx.study.auction.constants.Constants.AuctionStatus;
 import cx.study.auction.constants.Constants.OrderStatus;
 import cx.study.auction.dao.AuctionRepository;
 import cx.study.auction.dao.OrderRepository;
 import cx.study.auction.dao.UserRepository;
 import cx.study.auction.utils.OrderNumUtil;
 import org.springframework.core.annotation.OrderUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import javax.persistence.criteria.*;
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -53,7 +56,7 @@ public class OrderService {
             }
         });
     }
-
+    @Transactional
     public int pay(Integer id,String address){
         OrderInfo order = orderRepository.findOne(id);
         Auction auction = order.getAuction();
@@ -72,7 +75,7 @@ public class OrderService {
         order.setAddress(address.replace("@"," "));
         return orderRepository.save(order) == null ? 1 : 0;
     }
-
+    @Transactional
     public OrderInfo cancel(Integer id){
         OrderInfo order = orderRepository.findOne(id);
         if (order.getStatus() == OrderStatus.CANCEL ||
@@ -83,14 +86,21 @@ public class OrderService {
         order.setUpdateTime(System.currentTimeMillis());
         order.setEndTime(System.currentTimeMillis());
         Auction auction = order.getAuction();
-        auction.setStatus(Constants.AuctionStatus.CANCEL);
+        auction.setStatus(AuctionStatus.CANCEL);
         auction.setStartTime(null);
         auction.setEndTime(null);
         auction.setUpdateTime(System.currentTimeMillis());
         auctionRepository.save(auction);
         return orderRepository.save(order);
     }
-
+    @Transactional
+    public OrderInfo send(Integer id){
+        OrderInfo one = orderRepository.findOne(id);
+        one.setStatus(OrderStatus.WAIT_RECEIVED);
+        one.setUpdateTime(System.currentTimeMillis());
+        return orderRepository.save(one);
+    }
+    @Transactional
     public OrderInfo finish(Integer id){
         OrderInfo order = orderRepository.findOne(id);
         if (order.getStatus() == OrderStatus.CANCEL){
@@ -114,9 +124,9 @@ public class OrderService {
         order.setUpdateTime(System.currentTimeMillis());
         return orderRepository.save(order);
     }
-
-    public OrderInfo createOrder(Auction auction){
-        if (auction.getStatus() == Constants.AuctionStatus.SUCCESS){
+    @Transactional
+    public void createOrder(Auction auction){
+        if (auction.getStatus() == AuctionStatus.SUCCESS){
             OrderInfo order = new OrderInfo();
             order.setOrderNum(OrderNumUtil.createOrderNum());
             order.setStatus(OrderStatus.WAIT_PAY);
@@ -126,10 +136,33 @@ public class OrderService {
             order.setPrice(record.getPrice());
             order.setCreateTime(System.currentTimeMillis());
             order.setUpdateTime(System.currentTimeMillis());
-            order.setUrl(auction.getImageUrls().get(0).getUrl());
+            List<ImageUrl> imageUrls = auction.getImageUrls();
+            if (imageUrls != null && imageUrls.size() > 0) {
+                order.setUrl(imageUrls.get(0).getUrl());
+            }
             order.setUser(record.getUser());
-            return orderRepository.save(order);
+            orderRepository.save(order);
         }
-        return null;
+    }
+
+    public Page<OrderInfo> findAll(int start, int length, String query) {
+        int page = start/length;
+        Sort sort = new Sort(Sort.Direction.DESC,"updateTime");
+        PageRequest pageRequest = new PageRequest(page,length,sort);
+        return orderRepository.findAll(new Specification<OrderInfo>() {
+            @Override
+            public Predicate toPredicate(Root<OrderInfo> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                if (!StringUtils.isEmpty(query)){
+                    Path<String> orderNum = root.get("orderNum");
+                    Path<String> username = root.get("user").get("username");
+                    Path<String> auctionName = root.get("auction").get("name");
+                    Predicate predicate1 = criteriaBuilder.like(orderNum, "%" + query + "%");
+                    Predicate predicate2 = criteriaBuilder.like(username, "%" + query + "%");
+                    Predicate predicate3 = criteriaBuilder.like(auctionName, "%" + query + "%");
+                    criteriaQuery.where(criteriaBuilder.or(predicate1,predicate2,predicate3));
+                }
+                return null;
+            }
+        },pageRequest);
     }
 }
