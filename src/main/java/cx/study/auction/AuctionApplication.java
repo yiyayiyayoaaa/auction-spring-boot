@@ -2,7 +2,7 @@ package cx.study.auction;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import cx.study.auction.controller.LoginInterceptor;
+import cx.study.auction.interceptor.LoginInterceptor;
 import cx.study.auction.utils.NullStringToEmptyAdapterFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +32,8 @@ public class AuctionApplication extends WebMvcConfigurerAdapter{
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(new LoginInterceptor());
+		LoginInterceptor loginInterceptor = new LoginInterceptor();
+		registry.addInterceptor(loginInterceptor);
 		super.addInterceptors(registry);
 	}
 

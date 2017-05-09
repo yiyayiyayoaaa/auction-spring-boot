@@ -24,75 +24,31 @@
 <meta name="description" content="H-ui.admin 3.0，是一款由国人开发的轻量级扁平化网站后台模板，完全免费开源的网站后台管理系统模版，适合中小型CMS后台系统。">
 </head>
 <body>
-<article class="page-container">
-	<form class="form form-horizontal" id="form-admin-add">
-	<div class="row cl">
-		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>管理员：</label>
-		<div class="formControls col-xs-8 col-sm-9">
-			<input type="text" class="input-text" value="" placeholder="" id="adminName" name="adminName">
-		</div>
-	</div>
-	<div class="row cl">
-		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>初始密码：</label>
-		<div class="formControls col-xs-8 col-sm-9">
-			<input type="password" class="input-text" autocomplete="off" value="" placeholder="密码" id="password" name="password">
-		</div>
-	</div>
-	<div class="row cl">
-		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>确认密码：</label>
-		<div class="formControls col-xs-8 col-sm-9">
-			<input type="password" class="input-text" autocomplete="off"  placeholder="确认新密码" id="password2" name="password2">
-		</div>
-	</div>
-	<div class="row cl">
-		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>性别：</label>
-		<div class="formControls col-xs-8 col-sm-9 skin-minimal">
-			<div class="radio-box">
-				<input name="sex" type="radio" id="sex-1" checked>
-				<label for="sex-1">男</label>
-			</div>
-			<div class="radio-box">
-				<input type="radio" id="sex-2" name="sex">
-				<label for="sex-2">女</label>
-			</div>
-		</div>
-	</div>
-	<div class="row cl">
-		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>手机：</label>
-		<div class="formControls col-xs-8 col-sm-9">
-			<input type="text" class="input-text" value="" placeholder="" id="phone" name="phone">
-		</div>
-	</div>
-	<div class="row cl">
-		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>邮箱：</label>
-		<div class="formControls col-xs-8 col-sm-9">
-			<input type="text" class="input-text" placeholder="@" name="email" id="email">
-		</div>
-	</div>
-	<div class="row cl">
-		<label class="form-label col-xs-4 col-sm-3">角色：</label>
-		<div class="formControls col-xs-8 col-sm-9"> <span class="select-box" style="width:150px;">
-			<select class="select" name="adminRole" size="1">
-				<option value="0">超级管理员</option>
-				<option value="1">总编</option>
-				<option value="2">栏目主辑</option>
-				<option value="3">栏目编辑</option>
+<article class="page-container" >
+    <div class="form form-horizontal">
+        <form  id="form-add" action="add-admin">
+            <div class="row cl">
+                <div class="formControls col-xs-8 col-sm-9" style="text-align: center">
+                    登录名：<input style="width:150px;" type="text" class="input-text" value="" placeholder="" id="username" name="username">
+                </div>
+            </div>
+            <div class="row cl">
+                <div class="formControls col-xs-8 col-sm-9" style="text-align: center">角色： <span class="select-box" style="width:150px;">
+			<select class="select" name="level" size="1">
+				<option value="0">普通管理员</option>
+				<option value="1">超级管理员</option>
 			</select>
-			</span> </div>
-	</div>
-	<div class="row cl">
-		<label class="form-label col-xs-4 col-sm-3">备注：</label>
-		<div class="formControls col-xs-8 col-sm-9">
-			<textarea name="" cols="" rows="" class="textarea"  placeholder="说点什么...100个字符以内" dragonfly="true" onKeyUp="$.Huitextarealength(this,100)"></textarea>
-			<p class="textarea-numberbar"><em class="textarea-length">0</em>/100</p>
-		</div>
-	</div>
-	<div class="row cl">
-		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
-			<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
-		</div>
-	</div>
-	</form>
+			</span>
+                </div>
+            </div>
+        </form>
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9" style="text-align: center">
+                <input class="btn btn-primary radius" onclick="submit()" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+            </div>
+        </div>
+    </div>
+
 </article>
 
 <!--_footer 作为公共模版分离出去--> 
@@ -114,55 +70,18 @@ $(function(){
 		increaseArea: '20%'
 	});
 	
-	$("#form-admin-add").validate({
-		rules:{
-			adminName:{
-				required:true,
-				minlength:4,
-				maxlength:16
-			},
-			password:{
-				required:true,
-			},
-			password2:{
-				required:true,
-				equalTo: "#password"
-			},
-			sex:{
-				required:true,
-			},
-			phone:{
-				required:true,
-				isPhone:true,
-			},
-			email:{
-				required:true,
-				email:true,
-			},
-			adminRole:{
-				required:true,
-			},
-		},
-		onkeyup:false,
-		focusCleanup:true,
-		success:"valid",
-		submitHandler:function(form){
-			$(form).ajaxSubmit({
-				type: 'post',
-				url: "xxxxxxx" ,
-				success: function(data){
-					layer.msg('添加成功!',{icon:1,time:1000});
-				},
-                error: function(XmlHttpRequest, textStatus, errorThrown){
-					layer.msg('error!',{icon:1,time:1000});
-				}
-			});
-			var index = parent.layer.getFrameIndex(window.name);
-			parent.$('.btn-refresh').click();
-			parent.layer.close(index);
-		}
-	});
 });
+/*关闭弹出框口*/
+function layer_close(){
+    var index = parent.layer.getFrameIndex(window.name);
+    parent.layer.close(index);
+}
+    function submit() {
+        $('#form-add').ajaxSubmit(function (data) {
+            parent.layer.msg('添加成功!',{icon:1,time:1000});
+            layer_close();
+        })
+    }
 </script> 
 <!--/请在上方写此页面业务相关的脚本-->
 </body>

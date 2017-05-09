@@ -62,7 +62,6 @@ public class AdminService {
     public Admin resetPassword(Integer id){
         Admin admin = adminRepository.findOne(id);
         admin.setPassword("123456");
-        admin.setUpdateTime(System.currentTimeMillis());
         return  adminRepository.save(admin);
     }
 
@@ -70,6 +69,7 @@ public class AdminService {
     public Admin add(String username,int level){
         Admin admin = new Admin();
         admin.setUsername(username);
+        admin.setPassword("123456");
         admin.setLevel(level);
         admin.setCreateTime(System.currentTimeMillis());
         return adminRepository.save(admin);
@@ -87,5 +87,12 @@ public class AdminService {
         for (String id : split){
             delete(id);
         }
+    }
+
+    @Transactional
+    public Admin updateStatus(Integer id,int status){
+        Admin admin = adminRepository.findOne(id);
+        admin.setStatus(status);
+        return adminRepository.save(admin);
     }
 }

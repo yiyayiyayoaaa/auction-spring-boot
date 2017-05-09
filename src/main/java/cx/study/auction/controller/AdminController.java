@@ -3,11 +3,14 @@ package cx.study.auction.controller;
 import cx.study.auction.bean.Admin;
 import cx.study.auction.bean.Customer;
 import cx.study.auction.bean.HttpResult;
+import cx.study.auction.constants.Constants;
 import cx.study.auction.service.AdminService;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -68,6 +71,7 @@ public class AdminController {
     }
 
     @RequestMapping("/update-password")
+    @ResponseBody
     public HttpResult<String> updatePassword(HttpSession session,String password){
         Admin admin = (Admin) session.getAttribute("admin");
         Integer id = admin.getId();
@@ -79,6 +83,7 @@ public class AdminController {
     }
 
     @RequestMapping("/reset-password")
+    @ResponseBody
     public HttpResult<String> resetPassword(Integer id){
         Admin update = adminService.resetPassword(id);
         if (update != null) {
@@ -88,5 +93,43 @@ public class AdminController {
 
     }
 
+    @RequestMapping("/admin-start")
+    @ResponseBody
+    public HttpResult<String> start(Integer id){
+        adminService.updateStatus(id, Constants.UserStatus.USER_ING);
+        return new HttpResult<>(0,"",null);
+    }
 
+    @RequestMapping("/admin-stop")
+    @ResponseBody
+    public HttpResult<String> stop(Integer id){
+        adminService.updateStatus(id, Constants.UserStatus.DISABLE);
+        return new HttpResult<>(0,"",null);
+    }
+
+    @RequestMapping("/logout")
+    public ModelAndView logout(SessionStatus sessionStatus){
+        sessionStatus.setComplete();
+        return new ModelAndView("index");
+    }
+
+    @RequestMapping("/delete-batch-admin")
+    @ResponseBody
+    public HttpResult<String> deleteBatch(String ids){
+        adminService.deleteBatch(ids);
+        return new HttpResult<>(0,"",null);
+    }
+    @RequestMapping("/delete-admin")
+    @ResponseBody
+    public HttpResult<String> delete(String id){
+        adminService.delete(id);
+        return new HttpResult<>(0,"",null);
+    }
+
+    @RequestMapping("/add-admin")
+    @ResponseBody
+    public HttpResult<String> add(String username,int level){
+        adminService.add(username,level);
+        return new HttpResult<>(0,"",null);
+    }
 }

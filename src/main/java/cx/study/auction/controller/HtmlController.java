@@ -35,7 +35,7 @@ public class HtmlController {
         return new ModelAndView("index");
     }
 
-    @GetMapping(value = "/login")
+    @GetMapping(value = "/")
     public ModelAndView toLogin(){
         return new ModelAndView("login");
     }
@@ -128,7 +128,15 @@ public class HtmlController {
     public ModelAndView toAdminList(){
         return new ModelAndView("admin-list");
     }
-
+    @GetMapping("/change-password")
+    public ModelAndView toUpdatePassword(){
+        return new ModelAndView("change-password");
+    }
+    @GetMapping("/admin-add")
+    public ModelAndView toAdd(){
+        return new ModelAndView("admin-add");
+    }
+    /* 订单*/
     @GetMapping("/order")
     public ModelAndView toOrderList(){
         return new ModelAndView("order-list");
