@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import cx.study.auction.bean.HttpResult;
 import cx.study.auction.bean.User;
 import cx.study.auction.bean.UserAddress;
+import cx.study.auction.constants.Constants;
 import cx.study.auction.service.UserAddressService;
 import cx.study.auction.service.UserService;
 import cx.study.auction.utils.DefaultNicknameUtil;
@@ -32,6 +33,9 @@ public class UserRest {
         String password = json.get("password").getAsString();
         User login = userService.login(username, password);
         if (login != null){
+            if (login.getStatus() == Constants.UserStatus.DISABLE){
+                return new HttpResult<>(-1,"该账户已停用",login);
+            }
             return new HttpResult<>(0,"登录成功",login);
         } else {
             return new HttpResult<>(1,"用户名或密码错误",null);

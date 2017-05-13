@@ -38,4 +38,9 @@ public class HomPageRest {
         }
         return new HttpResult<>(0,"请求成功",homeItems);
     }
+    @RequestMapping("/random-view")
+    public HttpResult<List<Auction>> randomView(){
+        List<Auction> auctions = auctionService.random();
+        return new HttpResult<>(0, "", auctions);
+    }
 }

@@ -1,14 +1,8 @@
 package cx.study.auction.controller;
 
-import cx.study.auction.bean.Auction;
-import cx.study.auction.bean.AuctionType;
-import cx.study.auction.bean.Customer;
-import cx.study.auction.bean.ImageUrl;
+import cx.study.auction.bean.*;
 import cx.study.auction.dao.ImageUrlRepository;
-import cx.study.auction.service.AuctionService;
-import cx.study.auction.service.AuctionTypeService;
-import cx.study.auction.service.CustomerService;
-import cx.study.auction.service.ImageUrlService;
+import cx.study.auction.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -30,6 +24,10 @@ public class HtmlController {
     private AuctionService auctionService;
     @Resource
     private ImageUrlService imageUrlService;
+    @Resource
+    private AdminService adminService;
+    @Resource
+    private StatisticsService statisticsService;
     @GetMapping(value = "/index")
     public ModelAndView toIndex(){
         return new ModelAndView("index");
@@ -42,7 +40,10 @@ public class HtmlController {
 
     @GetMapping(value = "/welcome")
     public ModelAndView toWelcome(){
-        return new ModelAndView("welcome");
+        Statistics statistics = statisticsService.get();
+        ModelAndView modelAndView = new ModelAndView("welcome");
+        modelAndView.addObject("statistics",statistics);
+        return modelAndView;
     }
     /*  拍品管理  */
     @GetMapping(value = "/auction")
@@ -128,17 +129,27 @@ public class HtmlController {
     public ModelAndView toAdminList(){
         return new ModelAndView("admin-list");
     }
-    @GetMapping("/change-password")
-    public ModelAndView toUpdatePassword(){
-        return new ModelAndView("change-password");
+    @GetMapping("/change-password/{id}")
+    public ModelAndView toUpdatePassword(@PathVariable Integer id){
+        ModelAndView modelAndView = new ModelAndView("change-password");
+        Admin admin = adminService.findOne(id);
+        modelAndView.addObject("admin",admin);
+        return modelAndView;
     }
     @GetMapping("/admin-add")
     public ModelAndView toAdd(){
-        return new ModelAndView("admin-add");
+        return new ModelAndView("admin-add2");
     }
     /* 订单*/
     @GetMapping("/order")
     public ModelAndView toOrderList(){
         return new ModelAndView("order-list");
     }
+
+
+    @GetMapping("/blank")
+    public ModelAndView toBlank(){
+        return new ModelAndView("_blank");
+    }
+
 }

@@ -131,32 +131,30 @@
 				</dd>
 			</dl>
 		</div>
-		<dl id="menu-tongji">
-			<dt><i class="Hui-iconfont">&#xe61a;</i> 系统统计<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
-			<dd>
-				<ul>
-					<li><a data-href="charts-1" data-title="折线图" href="javascript:void(0)">折线图</a></li>
-					<li><a data-href="charts-2" data-title="时间轴折线图" href="javascript:void(0)">时间轴折线图</a></li>
-					<li><a data-href="charts-3" data-title="区域图" href="javascript:void(0)">区域图</a></li>
-					<li><a data-href="charts-4" data-title="柱状图" href="javascript:void(0)">柱状图</a></li>
-					<li><a data-href="charts-5" data-title="饼状图" href="javascript:void(0)">饼状图</a></li>
-					<li><a data-href="charts-6" data-title="3D柱状图" href="javascript:void(0)">3D柱状图</a></li>
-					<li><a data-href="charts-7" data-title="3D饼状图" href="javascript:void(0)">3D饼状图</a></li>
-			</ul>
-		</dd>
-	</dl>
-		<dl id="menu-system">
-			<dt><i class="Hui-iconfont">&#xe62e;</i> 系统管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
-			<dd>
-				<ul>
-					<li><a data-href="system-base" data-title="系统设置" href="javascript:void(0)">系统设置</a></li>
-					<li><a data-href="system-category" data-title="栏目管理" href="javascript:void(0)">栏目管理</a></li>
-					<li><a data-href="system-data" data-title="数据字典" href="javascript:void(0)">数据字典</a></li>
-					<li><a data-href="system-shielding" data-title="屏蔽词" href="javascript:void(0)">屏蔽词</a></li>
-					<li><a data-href="system-log" data-title="系统日志" href="javascript:void(0)">系统日志</a></li>
-			</ul>
-		</dd>
-	</dl>
+		<!--<dl id="menu-tongji">-->
+			<!--<dt><i class="Hui-iconfont">&#xe61a;</i> 系统统计<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>-->
+			<!--<dd>-->
+				<!--<ul>-->
+					<!--<li><a data-href="charts-1" data-title="折线图" href="javascript:void(0)">折线图</a></li>-->
+					<!--<li><a data-href="charts-2" data-title="时间轴折线图" href="javascript:void(0)">时间轴折线图</a></li>-->
+					<!--<li><a data-href="charts-3" data-title="区域图" href="javascript:void(0)">区域图</a></li>-->
+					<!--<li><a data-href="charts-4" data-title="柱状图" href="javascript:void(0)">柱状图</a></li>-->
+					<!--<li><a data-href="charts-5" data-title="饼状图" href="javascript:void(0)">饼状图</a></li>-->
+					<!--<li><a data-href="charts-6" data-title="3D柱状图" href="javascript:void(0)">3D柱状图</a></li>-->
+					<!--<li><a data-href="charts-7" data-title="3D饼状图" href="javascript:void(0)">3D饼状图</a></li>-->
+			<!--</ul>-->
+		<!--</dd>-->
+	<!--</dl>-->
+		<!--<dl id="menu-system">-->
+			<!--<dt><i class="Hui-iconfont">&#xe62e;</i> 系统管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>-->
+			<!--<dd>-->
+				<!--<ul>-->
+					<!--<li><a data-href="system-base" data-title="系统设置" href="javascript:void(0)">系统设置</a></li>-->
+					<!--<li><a data-href="system-data" data-title="数据字典" href="javascript:void(0)">数据字典</a></li>-->
+					<!--<li><a data-href="system-log" data-title="系统日志" href="javascript:void(0)">系统日志</a></li>-->
+			<!--</ul>-->
+		<!--</dd>-->
+	<!--</dl>-->
 </div>
 </aside>
 <div class="dislpayArrow hidden-xs"><a class="pngfix" href="javascript:void(0);" onClick="displaynavbar(this)"></a></div>
@@ -194,7 +192,7 @@
 
 <!--请在下方写此页面业务相关的脚本-->
 <script type="text/javascript" src="lib/jquery.contextmenu/jquery.contextmenu.r2.js"></script>
-<script type="text/javascript">
+<script type="text/javascript" th:inline="javascript">
 $(function(){
 	/*$("#min_title_list li").contextMenu('Huiadminmenu', {
 		bindings: {
@@ -224,11 +222,13 @@ function myselfinfo(){
 }
 
 function resetPassword() {
-
+    var id = [[${session.admin.id}]];
+	layer_show("修改密码","change-password/"+id,600,350);
 }
 
 function logout() {
-	$.post("logout")
+	$.post("logout");
+    top.location.href='/auction';
 }
 /*资讯-添加*/
 function article_add(title,url){

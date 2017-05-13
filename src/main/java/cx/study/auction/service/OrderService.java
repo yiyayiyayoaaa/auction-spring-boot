@@ -165,4 +165,19 @@ public class OrderService {
             }
         },pageRequest);
     }
+
+    public long countByStatus(int status){
+        return orderRepository.count(new Specification<OrderInfo>() {
+            @Override
+            public Predicate toPredicate(Root<OrderInfo> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                Path<Integer> s = root.get("status");
+                criteriaQuery.where(criteriaBuilder.equal(s,status));
+                return null;
+            }
+        });
+    }
+
+    public long count(){
+        return orderRepository.count();
+    }
 }

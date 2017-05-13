@@ -30,7 +30,7 @@
 			<li class="item" th:each="image:${images}">
 				<div class="portfoliobox">
 					<input class="checkbox" name="ck-id" type="checkbox" th:value="${image.id}">
-					<div class="picbox"><a th:href="@{${image.url}}" data-lightbox="gallery" ><img th:src="@{${image.url}}"></a></div>
+					<div class="picbox"><a th:href="@{'http://localhost:8088/'+${image.url}}" data-lightbox="gallery" ><img th:src="@{'http://localhost:8088/'+${image.url}}"></a></div>
                     <div class="textbox"></div>
 				</div>
 			</li>

@@ -61,7 +61,8 @@ public class FileController {
         String filename = file.getOriginalFilename();
         String suffix = filename.substring(filename.lastIndexOf("."));
         filename = UUID.randomUUID().toString() + suffix;
-        String path = request.getServletContext().getRealPath("/file/image");
+      //  String path = request.getServletContext().getRealPath("/file/image");
+        String path = "D:/apache-tomcat-7.0.68-img/webapps/ROOT/file/image";
         File savePath = new File(path);
         if (!savePath.exists()){
             savePath.mkdirs();

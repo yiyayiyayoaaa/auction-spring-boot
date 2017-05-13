@@ -28,11 +28,13 @@ public class AdminService {
     public Admin login(String username,String password){
         return adminRepository.findAdminByUsernameAndPassword(username,password);
     }
-
+    @Transactional
     public Admin update(Admin admin){
         return adminRepository.save(admin);
     }
-
+    public Admin findOne(Integer id){
+        return adminRepository.findOne(id);
+    }
     public Page<Admin> findAll(int start, int length, String query){
         int page = start/length;
         Sort sort = new Sort(Sort.Direction.DESC,"updateTime");
@@ -51,8 +53,11 @@ public class AdminService {
     }
 
     @Transactional //修改密码
-    public Admin updatePassword(Integer id,String password){
+    public Admin updatePassword(Integer id,String oldPassword,String password){
         Admin admin = adminRepository.findOne(id);
+        if (!admin.getPassword().equals(oldPassword)){
+            return null;
+        }
         admin.setPassword(password);
         admin.setUpdateTime(System.currentTimeMillis());
         return  adminRepository.save(admin);

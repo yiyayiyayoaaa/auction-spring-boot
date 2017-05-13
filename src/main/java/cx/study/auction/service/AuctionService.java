@@ -9,6 +9,7 @@ import cx.study.auction.dao.AuctionRepository;
 import cx.study.auction.dao.AuctionTypeRepository;
 import cx.study.auction.dao.CustomerRepository;
 import cx.study.auction.dao.ImageUrlRepository;
+import org.hibernate.jpa.criteria.OrderImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -19,8 +20,7 @@ import org.springframework.util.StringUtils;
 import javax.annotation.Resource;
 import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -240,5 +240,26 @@ public class AuctionService {
         service.schedule(runnable,delay, TimeUnit.MILLISECONDS);
         System.out.println("开始定时任务：" + new Date(System.currentTimeMillis() + delay));
     }
+    @Transactional
+    public List<Auction> random(){
+        List<Auction> auctions = new ArrayList<>();
+        auctions.addAll(findByStatus(AuctionStatus.WAIT_AUCTION));
+        auctions.addAll(findByStatus(AuctionStatus.AUCTION));
+        Collections.shuffle(auctions);
+        return auctions.subList(0,3);
+    }
 
+    public long countByStatus(int status){
+        return auctionRepository.count(new Specification<Auction>() {
+            @Override
+            public Predicate toPredicate(Root<Auction> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                Path<Integer> s = root.get("status");
+                criteriaQuery.where(criteriaBuilder.equal(s,status));
+                return null;
+            }
+        });
+    }
+    public long count(){
+        return auctionRepository.count();
+    }
 }

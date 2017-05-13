@@ -14,7 +14,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +36,10 @@ public class AdminController {
         if (!StringUtils.isEmpty(username) && !StringUtils.isEmpty(password)){
             Admin admin = adminService.login(username, password);
             if (admin != null){
+                if (admin.getStatus() == Constants.UserStatus.DISABLE){
+                    request.setAttribute("error","该账号已停用！");
+                    return "login";
+                }
                 Admin mAdmin  = (Admin) admin.clone();
                 session.setAttribute("admin",mAdmin);
                 admin.setUpdateTime(new Date().getTime());
@@ -72,10 +79,10 @@ public class AdminController {
 
     @RequestMapping("/update-password")
     @ResponseBody
-    public HttpResult<String> updatePassword(HttpSession session,String password){
+    public HttpResult<String> updatePassword(HttpSession session,String oldPassword,String password){
         Admin admin = (Admin) session.getAttribute("admin");
         Integer id = admin.getId();
-        Admin update = adminService.updatePassword(id, password);
+        Admin update = adminService.updatePassword(id,oldPassword,password);
         if (update != null) {
             return new HttpResult<>(0, "修改成功", null);
         }
@@ -108,9 +115,10 @@ public class AdminController {
     }
 
     @RequestMapping("/logout")
-    public ModelAndView logout(SessionStatus sessionStatus){
+    @ResponseBody
+    public void logout(SessionStatus sessionStatus, HttpSession session) throws IOException {
+        session.removeAttribute("admin");
         sessionStatus.setComplete();
-        return new ModelAndView("index");
     }
 
     @RequestMapping("/delete-batch-admin")

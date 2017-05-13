@@ -67,7 +67,7 @@ public class OrderRest {
     public HttpResult<String> cancel(@RequestBody()JsonObject json) throws Exception {
         int id = json.get("id").getAsInt();
         OrderInfo orderInfo = orderService.cancel(id);
-        if (orderInfo == null){
+        if (orderInfo != null){
             return new HttpResult<>(0,"请求成功",null);
         } else {
             return new HttpResult<>(1,"请求失败",null);
